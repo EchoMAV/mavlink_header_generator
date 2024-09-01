@@ -1,0 +1,2055 @@
+<mavlink>
+  <!-- These messages are specific to the MAVNet System             -->
+  <!-- mavlink ID range: 43000 - 43999 has been reserved            -->
+  <include>common.xml</include>
+  <include>ardupilotmega.xml</include>
+  <version>3</version>
+  <enums>
+    <enum name="MAVNET_SYSTEM_TYPE">
+      <description>MAVNet specific device type</description>
+      <entry name="MAVNET_SYSTEM_TYPE_SUBSCRIBER" value="0">
+        <description>Subscriber systems such as a ground control station comm stack</description>
+      </entry>
+      <entry name="MAVNET_SYSTEM_TYPE_PUBLISHER" value="1">
+        <description>Publisher systems such as an unmanned vehicle or sensor</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_TYPE">
+      <!-- 0 thru 27 are used by mavlink (MAV_TYPE_GENERIC thru MAV_TYPE_ADSB) -->
+
+      <entry value="64" name="MAV_TYPE_RELAY">
+        <description>MAVNet Comms Multiplexor</description>
+      </entry>
+	  	  
+      <!-- 65 was used for MAV_TYPE_SWITCHBOX/MAV_TYPE_KIWI_SENSOR which is not used and thus available -->
+
+      <entry value="66" name="MAV_TYPE_WEATHERPAK">
+        <description>MAVNet Weather Station</description>
+      </entry>
+
+      <!-- 67 was used for MAV_TYPE_SENSOR which is not used and thus available -->
+
+      <entry value="68" name="MAV_TYPE_BEACON">
+        <description>MAVNet Beacon Asset</description>
+      </entry>
+      <entry value="69" name="MAV_TYPE_FRND_COMPACT">
+        <description>MAVNet FRND Asset</description>
+      </entry>
+    </enum>
+
+    <enum name="SENSOR_TYPE">
+      <entry value="0" name="SENSOR_TYPE_BATTERY">
+        <description>MAVNet Battery(Payload)</description>
+      </entry>
+      <entry value="1" name="SENSOR_TYPE_FLOW">
+        <description>MAVNet Flow Sensor</description>
+      </entry>
+      <entry value="2" name="SENSOR_TYPE_SWITCH">
+        <description>MAVNet Switch Sensor(Payload)</description>
+      </entry>
+      <entry value="3" name="SENSOR_TYPE_AC_CURRENT">
+        <description>MAVNet Kiwi AC Current Sensor</description>
+      </entry>
+      <entry value="4" name="SENSOR_TYPE_DC_CURRENT">
+        <description>MAVNet Kiwi DC Current Sensor</description>
+      </entry>
+      <entry value="5" name="SENSOR_TYPE_WAES">
+        <description>MAVNet WAES Sensor Package(Payload)</description>
+      </entry>
+      <entry value="6" name="SENSOR_TYPE_CAMERA">
+        <description>MAVNet Onboard Asset Camera </description>
+      </entry>
+      <entry value="7" name="SENSOR_TYPE_CESER">
+        <description>MAVNet CESER Machine Learning / Docker container that processes imagery and identifies infrastructure item(Payload)</description>
+      </entry>
+       <entry value="8" name="SENSOR_TYPE_ISSMS">
+        <description>MAVNet specialized sensor for ISSMS project(Payload)</description>
+      </entry>
+       <entry value="9" name="SENSOR_TYPE_GRIPPER">
+        <description>MAVNet GRIPPER sensor(Payload)</description>
+      </entry>
+       <entry value="10" name="SENSOR_TYPE_SILVUSRADIO">
+        <description>MAVNet Reporting interface to Silvus Streamcaster Radio (temp, RSSI, battery)(Payload)</description>
+      </entry>
+       <entry value="11" name="SENSOR_TYPE_CAMERAGIMBAL">
+        <description>MAVNet Combined Camera and Gimbal(Payload)</description>
+      </entry>
+       <entry value="12" name="SENSOR_TYPE_SUPERVOLO">
+        <description>MAVNet SuperVolo platform information(Payload)</description>
+      </entry>
+       <entry value="13" name="SENSOR_TYPE_CSTAR">
+        <description>MAVNet C-Star Status information(Payload)</description>
+      </entry>
+       <entry value="14" name="SENSOR_TYPE_N2N_MONITOR">
+        <description>MAVNet N2N Monitor(Payload)</description>
+      </entry>
+       <entry value="15" name="SENSOR_TYPE_RADEYE">
+        <description>MAVNet RADEYE Sensor</description>
+      </entry>
+       <entry value="16" name="SENSOR_TYPE_KROMEK">
+        <description>MAVNet KROMEK Sensor</description>
+      </entry>
+       <entry value="17" name="SENSOR_TYPE_TEMP">
+        <description>MAVNet General Purpose Temperature Sensor(Payload)</description>
+      </entry>
+      <entry value="18" name="SENSOR_TYPE_GAMMATRACER">
+        <description>MAVNet Gamma Tracer Temperature Sensor</description>
+      </entry>
+      <entry value="22" name="SENSOR_TYPE_G2205">
+        <description>MAVNet G2205 Sensor(Payload)</description>
+      </entry>
+      <entry value="23" name="SENSOR_TYPE_SONICTWO">
+        <description>MAVNet SONICTWO Sensor(Payload)</description>
+      </entry>
+      <entry value="24" name="SENSOR_TYPE_ISSMSBRAKE">
+        <description>MAVNet ISSMS Brake Sensor(Payload)</description>
+      </entry>    
+      <entry value="25" name="SENSOR_TYPE_ISSMSJUNCTIONBOX">
+        <description>MAVNet ISSMS JunctionBox Sensor(Payload)</description>
+      </entry>                     
+	  <entry value="26" name="SENSOR_TYPE_SHIELD_TIMING">
+        <description>MAVNet SHIELD Timing Sensor(Payload)</description>
+      </entry>  
+	  <entry value="27" name="SENSOR_TYPE_SHIELD_SIGNATURE">
+        <description>MAVNet SHIELD Signature Sensor(Payload)</description>
+      </entry> 
+	  <entry value="28" name="SENSOR_TYPE_SPACES_LIGHT">
+        <description>MAVNet SPACES Light Sensor(Payload)</description>
+      </entry>  	  
+	  <entry value="29" name="SENSOR_TYPE_DRIVERID">
+        <description>MAVNet DriverID Sensor(Payload)</description>
+      </entry> 
+	  <entry value="30" name="SENSOR_TYPE_REMOTEID">
+        <description>RemoteID Sensor(Payload)</description>
+      </entry> 
+	  </enum>
+    
+    <enum name="ANNOTATION_TYPE">
+      <entry value="0" name="POINT">
+        <description>Point annotation, fields include name, comm group, lat, lon and color. Clamped to ground.</description>
+      </entry>
+      <entry value="1" name="CIRCLE">
+        <description>Circle annotation, fields include name, comm group, lat, lon of center, radius, stroke color and fill color. Clamped to ground.</description>
+      </entry>
+      <entry value="2" name="CYLINDER">
+        <description>Cylinder annotation, fields include name, comm group, lat, lon of center, radius, stroke color, fill color, and height (AGL).</description>
+      </entry>
+      <entry value="3" name="POLYGON">
+        <description>Polygon annotation, fields include name, comm group, stroke color, fill color and up to 12 points, lat1, lon1, lat2, lon2, etc. The polygon should be closed between the last defined point and the first defined point. clamped to ground.</description>
+      </entry>
+      <entry value="4" name="POLYGON_3D">
+        <description>3D Polygon annotation, fields include name, comm group, stroke color, fill color, and up to 12 3d points, lat1, lon1, alt1, lat2, lon2, alt2 etc. The polygon should be closed between the last defined point and the first defined point. Altitudes are AGL.</description>
+      </entry>
+      <entry value="5" name="POINT_IMAGE">
+        <description>Special point annotation that includes an image. Fields include name, comm group, lat, lon, color, full size image url and thumbnail url. Clamped to ground.</description>
+      </entry>
+	  <entry value="6" name="INFRASTRUCTURE">
+        <description>Special point_image annotation that includes additional fields such as type of infrastructure, identification confidence, damage rating, and an optional image. Clamped to ground.</description>
+      </entry>
+
+	  <!-- Matches Filename -->
+      <entry value="10" name="POLE_CIRCLE_Red"> <description> </description></entry>
+      <entry value="11" name="POLE_CIRCLE_Yellow"> <description> </description></entry>
+      <entry value="12" name="POLE_CIRCLE_Green"> <description> </description></entry>
+      <entry value="13" name="SUBSTATION_CIRCLE_Red"> <description> </description></entry>
+      <entry value="14" name="SUBSTATION_CIRCLE_Yellow"> <description> </description></entry>
+      <entry value="15" name="SUBSTATION_CIRCLE_Green"> <description> </description></entry>
+	
+	<!-- Used by the SENSOR_TYPE_REMOTEID, not clamped to ground -->
+      <entry value="16" name="RemoteID_Target">    <description>RemoteID Target</description></entry>
+      <entry value="17" name="RemoteID_Operator">  <description>RemoteID Operator</description></entry>
+
+      <entry value="255" name="NONE"> <description> </description></entry>
+    </enum>
+
+    <enum name="COMM_MODE">
+      <entry value="0" name="ACTIVE">
+        <description>Interface is in active mode</description>
+      </entry>
+      <entry value="1" name="STANDBY">
+        <description>Interface is in standby (silent) mode</description>
+      </entry>
+    </enum>
+
+    <enum name="BOOLEAN_ENUM">
+       <description>Simple ENUM for On/Off values instead of uint8_t. This indicates to the UI to use a STEP graph for this item.</description>
+      <entry value="0" name="FALSE">
+        <description>False</description>
+      </entry>
+      <entry value="1" name="TRUE">
+        <description>True</description>
+      </entry>
+    </enum>
+    
+    <enum name="GPS_STATE">
+       <description>These flags encode GPS state. They are OR-combined flags.</description>
+      <entry value="128" name="GPS_STATE_FLAG_RESERVED_128">
+        <description>0b10000000 Reserved for future use.</description>
+      </entry>
+      <entry value="64" name="GPS_STATE_FLAG_RESERVED_64">
+        <description>0b01000000 Reserved for future use.</description>
+      </entry>
+      <entry value="32" name="GPS_STATE_FLAG_RESERVED_32">
+        <description>0b00100000 Reserved for future use.</description>
+      </entry>
+      <entry value="16" name="GPS_STATE_FLAG_RESERVED_16">
+        <description>0b00010000 Reserved for future use.</description>
+      </entry>
+      <entry value="8" name="GPS_STATE_FLAG_RESERVED_8">
+        <description>0b00001000 Reserved for future use.</description>
+      </entry>
+      <entry value="4" name="GPS_STATE_FLAG_RESERVED_4">
+        <description>0b00000100 Reserved for future use.</description>
+      </entry>
+      <entry value="2" name="GPS_STATE_FLAG_RESERVED_2">
+        <description>0b00000010 Reserved for future use.</description>
+      </entry>
+      <entry value="1" name="GPS_STATE_FLAG_VALID">
+        <description>0b00000001 GPS Reports position is valid.</description>
+      </entry>
+    </enum>
+    
+    <enum name="SENSOR_STATE">
+      <entry value="0" name="OFF">
+        <description>Device is OFF</description>
+      </entry>
+      <entry value="1" name="ON">
+        <description>Device is ON</description>
+      </entry>
+       <entry value="2" name="STANDBY">
+        <description>Device is in standby/low power mode if supported</description>
+      </entry>
+    </enum>
+
+    <enum name="COMM_INTERFACE">
+      <entry value="1" name="LOS">
+        <description>Line of sight radio link</description>
+      </entry>
+      <entry value="2" name="INTERNET">
+        <description>Internet (or cellular) link</description>
+      </entry>
+      <entry value="3" name="SATELLITE">
+        <description>Satellite link</description>
+      </entry>
+    </enum>
+
+    <enum name="INFRASTRUCTURE_TYPES">
+      <entry value="0" name="UNKNOWN">
+        <description>Unknown</description>
+      </entry>
+      <entry value="1" name="UTILITY_POLE">
+        <description>Electrical Utility Pole</description>
+      </entry>
+      <entry value="2" name="SUBSTATION">
+        <description>Electrical Substation</description>
+      </entry>
+    </enum>
+    
+    <enum name="SENSOR_CSTAR_STATUS">
+      <entry value="1" name="Ok">      <description>C-Star Ok</description> </entry> 
+      <entry value="2" name="InAlert"> <description>C-Star In-Alert</description> </entry>
+      <entry value="3" name="InActive"> <description>C-Star In-Active</description> </entry>
+    </enum>
+  
+  <enum name="SENSOR_CSTAR_FLAGS">
+      <description>These flags encode CStar Sensor state. They are OR-combined flags.</description>
+      <entry value="128" name="SENSOR_CSTAR_FLAG_RESERVED_128">
+        <description>0b10000000 Reserved for future use.</description>
+      </entry>
+      <entry value="64" name="SENSOR_CSTAR_FLAG_RESERVED_64">
+        <description>0b01000000 Reserved for future use.</description>
+      </entry>
+      <entry value="32" name="SENSOR_CSTAR_FLAG_RESERVED_32">
+        <description>0b00100000 Reserved for future use.</description>
+      </entry>
+      <entry value="16" name="SENSOR_CSTAR_FLAG_RESERVED_16">
+        <description>0b00010000 Reserved for future use.</description>
+      </entry>
+      <entry value="8" name="SENSOR_CSTAR_FLAG_IN_ALERT">
+        <description>0b00001000 Device in Alert</description>
+      </entry>
+      <entry value="4" name="SENSOR_CSTAR_FLAG_MOVING">
+        <description>0b00000100 Is vehical moving.</description>
+      </entry>
+      <entry value="2" name="SENSOR_CSTAR_FLAG_RUNNING">
+        <description>0b00000010 Is vehicle running</description>
+      </entry>
+      <entry value="1" name="SENSOR_CSTAR_FLAG_ISCONNECTED">
+        <description>0b00000001 Is CAN Bus connected to J1939.</description>
+      </entry>
+    </enum>
+    
+    <enum name="SENSOR_N2NMONITOR_STATUS">
+    <description>These flags enumerate the states of each monitored connection.</description>
+    <entry value="0" name="Off">          <description>Connection not Monitored</description> </entry> 
+      <entry value="1" name="Unknown">      <description>Connection State Unknown</description> </entry>
+      <entry value="2" name="Disconnected"> <description>Disconnected</description> </entry>
+      <entry value="3" name="Connected">    <description>Connected</description> </entry>
+    </enum>
+
+    <enum name="SENSOR_N2NMONITOR_MODE">
+    <description>These flags enumerate the mode for each N2N declared connection.</description>
+    <entry value="0" name="Off">      <description>Ignore Connection</description> </entry> 
+      <entry value="1" name="Monitor">  <description>Monitor</description> </entry>
+      <entry value="2" name="Auto">     <description>Monitor and try to ReConnect if disconnected</description> </entry>
+    </enum>
+    
+    <enum name="CSTAR_ALERTS">
+    <description>These flags enumerate the various alert conditions that a C-Star unit can report.</description>
+      <entry value="0" name="Battery">   <description>Battery Low, value is current millivolts</description> </entry> 
+      <entry value="1" name="IMU_Roll">  <description>IMU "Tip" Roll Angle, value is signed hundredths of degrees</description> </entry>
+      <entry value="2" name="IMU_Pitch"> <description>IMU "Tip" Pitch, value is signed hundredths of degrees</description> </entry>
+      <entry value="3" name="IMU_Long">  <description>IMU "Bump" (Longitudinal) G's in signed milli-Gs</description> </entry>
+      <entry value="4" name="IMU_Lateral">  <description>Lateral IMU G's in signed milli-Gs</description> </entry>
+      <entry value="5" name="Tow_Detected">  <description>System is detecting that the truck is being towed</description> </entry>
+      <entry value="6" name="IMU_Vertical">  <description>Vertical IMU G's in signed milli-Gs</description> </entry>
+      <entry value="7" name="Other">     <description>Some other exceptional condition detected</description> </entry>
+    </enum>
+    
+    <enum name="ISSMS_ALERTS">
+    <description>These flags enumerate the various alert conditions that an ISSMS unit can report.</description>
+      <entry value="0"  name="Battery">   <description>Battery Low, value is current millivolts</description> </entry> 
+      <entry value="1"  name="IMU_Roll">  <description>IMU Roll Angle, value is signed hundredths of degrees</description> </entry>
+      <entry value="2"  name="IMU_Pitch"> <description>IMU Pitch, value is signed hundredths of degrees</description> </entry>
+      <entry value="3"  name="RDQ_Long">  <description>RDQ, G's in signed milli-Gs</description> </entry>
+      <entry value="4"  name="RDQ_Lat">   <description>RDQ, G's in signed milli-Gs</description> </entry>
+      <entry value="5"  name="RDQ_Vert">  <description>RDQ, G's in signed milli-Gs</description> </entry>
+      <entry value="6"  name="Temp">      <description>Temperature, C. Ambient, CPU, or LTE,</description> </entry>
+      <entry value="7"  name="Speed">     <description>Speed threshold exceeded, m/sec * 10</description> </entry>
+      <entry value="8"  name="Brake">     <description>Brake problem detected.</description> </entry>
+      <entry value="9"  name="TruckHunting"> <description>Truck hunting detected</description> </entry>
+      <entry value="10" name="CarRocking">   <description>Car rocking detected</description> </entry>
+      <entry value="11" name="WheelTemp">    <description>Wheel Temp, C</description> </entry>
+      <entry value="12" name="BearingTemp">  <description>Bearing Temp, C</description> </entry>
+      <entry value="13" name="JBVib">        <description>JBVib, Vert milli-Gs</description> </entry>
+      <entry value="14" name="TBD">          <description>TBD</description> </entry>
+    </enum>
+    
+   <enum name="BVM_ALERTS">
+   <description>Battery Voltage Monitor Alert conditions. Used by the Battery Sensor. Not Bit flags.</description>
+     <entry value="0"  name="Ok">          <description>Ok</description> </entry> 
+     <entry value="1"  name="Charging">    <description>Charing</description> </entry> 
+     <entry value="2"  name="Discharging"> <description>Discharing</description> </entry> 
+     <entry value="10" name="OverTemp">    <description>OverTemp</description> </entry> 
+     <entry value="11" name="OverLoad">    <description>OverLoad</description> </entry> 
+     <entry value="12" name="CellLow">     <description>CellLow</description> </entry> 
+     <entry value="13" name="OverCurrent"> <description>OverCurrent</description> </entry> 
+     <entry value="14" name="HeatingElementOn"> <description>HeatingElementOn</description> </entry> 
+   </enum>
+	
+   <enum name="REMOTEID_TRANSMISSION_MODES">
+      <description>
+		The transmission modes the DroneScout 230 can detect.
+      </description>
+      <entry value="0" name="UNKNOWN">       <description>Unknown</description></entry>
+      <entry value="1" name="BLELegacy">     <description>TBD</description> </entry>
+      <entry value="2" name="BLELongRange">  <description>TBD</description> </entry>
+      <entry value="3" name="BLEDualMode">   <description>TBD</description> </entry>
+      <entry value="4" name="WLAN_NAN">      <description>TBD</description> </entry>
+      <entry value="5" name="WLAN_DualMode"> <description>TBD</description> </entry>
+      <entry value="6" name="WLAN_Beacon">   <description>TBD</description> </entry>
+      <entry value="7" name="ALL_Modes">     <description>TBD</description> </entry>
+    </enum>
+
+   <enum name="REMOTEID_UATYPES">
+      <description>
+		The UA Types supported, matches ODID_uatype.
+      </description>
+      <entry value="0" name="NONE">  <description>Unknown</description></entry>
+      <entry value="1" name="AEROPLANE">  <description>TBD</description> </entry>
+      <entry value="2" name="HELICOPTER_OR_MULTIROTOR">  <description>TBD</description> </entry>
+      <entry value="3" name="GYROPLANE">  <description>TBD</description> </entry>
+      <entry value="4" name="HYBRID_LIFT">  <description>TBD</description> </entry>
+      <entry value="5" name="ORNITHOPTER">  <description>TBD</description> </entry>
+      <entry value="6" name="GLIDER">  <description>TBD</description> </entry>
+      <entry value="7" name="KITE">  <description>TBD</description> </entry>
+      <entry value="8" name="FREE_BALLOON">  <description>TBD</description> </entry>
+      <entry value="9" name="CAPTIVE_BALLOON">  <description>TBD</description> </entry>
+      <entry value="10" name="AIRSHIP">  <description>TBD</description> </entry>
+      <entry value="11" name="FREE_FALL_PARACHUTE">  <description>TBD</description> </entry>
+      <entry value="12" name="ROCKET">  <description>TBD</description> </entry>
+      <entry value="13" name="TETHERED_POWERED_AIRCRAFT">  <description>TBD</description> </entry>
+      <entry value="14" name="GROUND_OBSTACLE">  <description>TBD</description> </entry>
+      <entry value="15" name="OTHER">  <description>TBD</description> </entry>
+    </enum>	
+	
+   <enum name="REMOTEID_STATUS">
+      <description>
+		The Status matches ODID_status.
+      </description>
+      <entry value="0"  name="UNDECLARED">                <description>Undeclared</description></entry>
+      <entry value="1"  name="GROUND">                    <description>Ground</description> </entry>
+      <entry value="2"  name="AIRBORNE">                  <description>Airborne</description> </entry>
+      <entry value="3"  name="EMERGENCY">                 <description>Emergency</description> </entry>
+      <entry value="4"  name="REMOTE_ID_SYSTEM_FAILURE">  <description>RemoteID Failure</description> </entry>
+      <entry value="10" name="OFFLINE">                   <description>Offline (custom)</description> </entry>
+    </enum>	
+	
+    <enum name="SENSORMGR_CMDS">
+      <description>
+        Commands to be forwarded to the SensorManager and then forwarded to Sensors support these commands. 
+        The will be sent to ALL Sensors unless a non-zero component ID is specified. Each sensor specified what
+            commands it listens for.
+      </description>
+      <entry value="0" name="UNKNOWN">       <description>Unknown/Ignored</description></entry>
+      <entry value="1" name="SensorState">   <description>Set Sensor State.  Param3:1-On,0-Off Param4:Operating Mode.</description> </entry>
+      <entry value="2" name="GripperGrab">   <description>Gripper State.     Param3:1Grab,0-Release </description> </entry>
+      <entry value="3" name="StreamVideo">   <description>StreamVideo State. Param3:1-On,0-Off</description> </entry>
+      <entry value="4" name="N2NMon_CONFIG"> <description>Config N2N Monitor. Param3:Chnl (0,1) Param4:State(0-Off,1-Monitor,2-Auto)</description> </entry>
+      <entry value="5" name="WAESFanSpeed">  <description>Change the WAES Fan Speed. Param3: UINT from 0-5, zero for off</description> </entry>
+    </enum>
+    
+    <enum name="SENSOR_CAMERA_FLAG">
+       <description>These flags encode elements of state. They are OR-combined flags.</description>
+      <entry value="128" name="SENSOR_CAMERA_FLAG_RESERVED_128">
+        <description>0b10000000 Reserved for future use.</description>
+      </entry>
+      <entry value="64" name="SENSOR_CAMERA_FLAG_RESERVED_64">
+        <description>0b01000000 Reserved for future use.</description>
+      </entry>
+      <entry value="32" name="SENSOR_CAMERA_FLAG_RESERVED_32">
+        <description>0b00100000 Reserved for future use.</description>
+      </entry>
+      <entry value="16" name="SENSOR_CAMERA_FLAG_RESERVED_16">
+        <description>0b00010000 Reserved for future use.</description>
+      </entry>
+      <entry value="8" name="SENSOR_CAMERA_FLAG_ONBOARD_STORAGE">
+        <description>0b00001000 Indicates camera has on-board storage for images and/or video.</description>
+      </entry>
+      <entry value="4" name="SENSOR_CAMERA_FLAG_VIDEO_CAPABLE">
+        <description>0b00000100 Indicates video is available.</description>
+      </entry>
+      <entry value="2" name="SENSOR_CAMERA_FLAG_IMAGE_CAPABLE">
+        <description>0b00000010 Indicates still image functionality is available.</description>
+      </entry>
+      <entry value="1" name="SENSOR_CAMERA_ONBOARD">
+        <description>0b00000001 Indicates the Camera is on-board, images can be transfered to the companion computer.</description>
+      </entry>
+    </enum>
+
+   <enum name="SENSOR_CAMERAGIMBAL_MODE_FLAG">
+       <description>These flags encode elements of state. They are OR-combined flags.</description>
+      <entry value="128" name="SENSOR_CAMERAGIMBAL_MODE_RESERVED_128">
+        <description>0b10000000 Reserved for future use.</description>
+      </entry>
+      <entry value="64" name="SENSOR_CAMERAGIMBAL_MODE_RESERVED_64">
+        <description>0b01000000 Reserved for future use.</description>
+      </entry>
+      <entry value="32" name="SENSOR_CAMERAGIMBAL_MODE_GRR">
+        <description>0b00100000 Indicates Camera is in GRR mode.</description>
+      </entry>
+      <entry value="16" name="SENSOR_CAMERAGIMBAL_MODE_FORWARD">
+        <description>0b00010000 Indicates Camera is facing forward in a fixed pilot position.</description>
+      </entry>
+      <entry value="8" name="SENSOR_CAMERAGIMBAL_MODE_MANUAL">
+        <description>0b00001000 Indicates camera is being manually set in a fixed(pan/tilt) position.</description>
+      </entry>
+      <entry value="4" name="SENSOR_CAMERAGIMBAL_MODE_PTC">
+        <description>0b00000100 Indicates Camera will Point to Target ROIs from MAVNet.</description>
+      </entry>
+      <entry value="2" name="SENSOR_CAMERAGIMBAL_MODE_NADIR">
+        <description>0b00000010 Indicates Camera is pointed NADIR.</description>
+      </entry>
+      <entry value="1" name="SENSOR_CAMERAGIMBAL_MODE_STOWED">
+        <description>0b00000001 Indicates Camera is in a SAFE, but not operational, position for Landing or Take-off.</description>
+      </entry>
+    </enum>
+    
+   <enum name="SENSOR_CAMERAGIMBAL_VIDEO_FLAG">
+       <description>These flags encode elements of state. They are OR-combined flags.</description>
+      <entry value="128" name="SENSOR_CAMERAGIMBAL_VIDEO_RESERVED_128">
+        <description>0b10000000 Reserved for future use.</description>
+      </entry>
+      <entry value="64" name="SENSOR_CAMERAGIMBAL_VIDEO_RESERVED_64">
+        <description>0b01000000 Reserved for future use.</description>
+      </entry>
+      <entry value="32" name="SENSOR_CAMERAGIMBAL_VIDEO_RESERVED_32">
+        <description>0b00100000 Reserved for future use.</description>
+      </entry>
+      <entry value="16" name="SENSOR_CAMERAGIMBAL_VIDEO_RESERVED_16">
+        <description>0b00010000 Reserved for future use.</description>
+      </entry>
+      <entry value="8" name="SENSOR_CAMERAGIMBAL_VIDEO_RESERVED_8">
+        <description>0b00001000 Reserved for future use.</description>
+      </entry>
+      <entry value="4" name="SENSOR_CAMERAGIMBAL_VIDEO_PIP">
+        <description>0b00000100 Indicates Camera is in a Picture-in-Picture mode.</description>
+      </entry>
+      <entry value="2" name="SENSOR_CAMERAGIMBAL_VIDEO_THERMAL">
+        <description>0b00000010 Indicates Camera is in a Thermal mode.</description>
+      </entry>
+      <entry value="1" name="SENSOR_CAMERAGIMBAL_VIDEO_EO">
+        <description>0b00000001 Indicates Camera is in a EO mode.</description>
+      </entry>
+    </enum>
+       
+    <enum name="ASSET_STATE_FLAG">
+      <description>These flags encode elements of state. They are OR-combined flags.</description>
+      <entry value="128" name="ASSET_STATE_FLAG_RESERVED_128">
+        <description>0b10000000 Reserved for future use.</description>
+      </entry>
+      <entry value="64" name="ASSET_STATE_FLAG_RESERVED_64">
+        <description>0b01000000 Reserved for future use.</description>
+      </entry>
+      <entry value="32" name="ASSET_STATE_FLAG_RESERVED_32">
+        <description>0b00100000 Reserved for future use.</description>
+      </entry>
+      <entry value="16" name="ASSET_STATE_FLAG_RESERVED_16">
+        <description>0b00010000 Reserved for future use.</description>
+      </entry>
+      <entry value="8" name="ASSET_STATE_FLAG_VTOL_ENGAGED">
+        <description>0b00001000 Indicate that the asset is operating in VTOL mode.</description>
+      </entry>
+      <entry value="4" name="ASSET_STATE_FLAG_VTOL_CAPABLE">
+        <description>0b00000100 Indicate that the asset is capable of VTOL mode.</description>
+      </entry>
+      <entry value="2" name="ASSET_STATE_FLAG_TETHERED">
+        <description>0b00000010 Indicate that the asset is connected to a cable.</description>
+      </entry>
+      <entry value="1" name="ASSET_STATE_FLAG_DISENGAGED">
+        <description>0b00000001 Indicate that MAVNet has been overridden by a mode change or mavlink gcs (e.g. disengaged).</description>
+      </entry>
+    </enum>
+
+    <enum name="MAVNET_SENSOR_FLAG">
+      <description>These flags encode elements of sensor reports. They are OR-combined flags.</description>
+      <entry value="128" name="MAVNET_SENSOR_FLAG_RESERVED_128">
+        <description>0b10000000 Reserved for future use.</description>
+      </entry>
+      <entry value="64" name="MAVNET_SENSOR_FLAG_RESERVED_64">
+        <description>0b01000000 Reserved for future use.</description>
+      </entry>
+      <entry value="32" name="MAVNET_SENSOR_FLAG_RESERVED_32">
+        <description>0b00100000 Reserved for future use.</description>
+      </entry>
+      <entry value="16" name="MAVNET_SENSOR_FLAG_RESERVED_16">
+        <description>0b00010000 Reserved for future use.</description>
+      </entry>
+      <entry value="8" name="MAVNET_SENSOR_FLAG_RESERVED_8">
+        <description>0b00001000 Reserved for future use.</description>
+      </entry>
+      <entry value="4" name="MAVNET_SENSOR_FLAG_NO_PARAMS">
+        <description>0b00000100 Enabled if the sensor does not use parameters. Setting this to 1 will prevent server from asking for parameters</description>
+      </entry>
+      <entry value="2" name="MAVNET_SENSOR_FLAG_AUTOGROUP">
+        <description>0b00000010 The sensor should autotaically be grouped with its asset / platform by callsign.</description>
+      </entry>
+      <entry value="1" name="MAVNET_SENSOR_FLAG_GROUP_EPHEMERAL">
+        <description>0b00000001 The sensor group is transitive and should be re-evaluated on each power on cycle.</description>
+      </entry>
+    </enum>
+
+    
+    <!-- MAVNet Commands -->
+    <enum name="MAVNET_CMD">
+      <description>
+        Commands to be executed by the MAVNet processor. 
+        They can be executed on user request, or as part of a mission script. 
+        If the action is used in a mission, the parameter mapping to the waypoint/mission message is as follows: 
+          Param 1, Param 2, Param 3, Param 4, X: Param 5, Y:Param 6, Z:Param 7.
+        This format is copied from the MAV_CMD enum.
+        Note:
+          When a position may be specified, if the lat/lon are given as 0/0 the position should be
+          interpreted as NULL.
+      </description>
+      
+      <entry value="5" name="MAVNET_CMD_PAUSE">
+        <description>Put the system into a paused state.</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="6" name="MAVNET_CMD_UNPAUSE">
+        <description>Clear the system's paused state.</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="10" name="MAVNET_CMD_TAKEOFF">
+        <description>Takeoff to navigation height and hold position</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Takeoff height AHL (Altitude above home level), in meters * 1000 (0 for default)</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="11" name="MAVNET_CMD_LAND">
+        <description>Navigate to the given position and land. If the position is (0,0,0), then land at home otherwise land at given location.</description>
+        <param index="1">Approximate gound level, MSL in meters * 1000</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Latitude (WGS84), in degrees * 1E7</param>
+        <param index="6">Longitude (WGS84), in degrees * 1E7</param>
+        <param index="7">AHL (Altitude above home level), in meters * 1000 (positive for up)</param>
+      </entry>
+
+      <entry value="12" name="MAVNET_CMD_ABORT">
+        <description>The vehicle will switch to RTL mode and go to the nearest rally point (if specified) or the launch position. Vehicles may land when this position is reached.</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="20" name="MAVNET_CMD_GO_TO">
+        <description>Move to a specified position</description>
+        <param index="1">Approximate gound level, MSL in meters * 1000</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Start height AHL (Altitude above home level), in meters * 1000 (0 for current)</param>
+        <param index="5">Latitude (WGS84), in degrees * 1E7</param>
+        <param index="6">Longitude (WGS84), in degrees * 1E7</param>
+        <param index="7">AHL (Altitude above home level), in meters * 1000 (positive for up)</param>
+      </entry>
+
+      <entry value="21" name="MAVNET_CMD_SET_IMMEDIATE_ALT">
+        <description>Set the ImmediateAltitude state to a given value.</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">AHL (Altitude above home level), in meters * 1000 (positive for up)</param>
+      </entry>
+
+       <entry value="22" name="MAVNET_CMD_SET_SPEED">
+        <description>Set the desired horizontal navigation speed of the vehicle in decimeters per second.</description>
+        <param index="1">Speed (dm/sec)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="23" name="MAVNET_CMD_GO_HOME">
+        <description>Move to the lat/lon position where the asset was ARMED</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Start height AHL (Altitude above home level), in meters * 1000 (0 for current)</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">AHL (Altitude above home level), in meters * 1000 (positive for up)</param>
+      </entry>
+
+      <entry value="25" name="MAVNET_CMD_SET_TARGET_POSITION">
+        <description>Set the target position. Position may be NULL to clear the target parameter.</description>
+        <param index="1">Approximate gound level, MSL in meters * 1000</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Latitude (WGS84), in degrees * 1E7</param>
+        <param index="6">Longitude (WGS84), in degrees * 1E7</param>
+        <param index="7">AHL (Altitude above home level), in meters * 1000 (positive for up)</param>
+      </entry>
+
+      <entry value="26" name="MAVNET_CMD_SET_GRIPPER">
+        <description>Set the gripper state to hold or release.</description>
+        <param index="1">Gripper state (0=Release, 1=Hold)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="27" name="MAVNET_CMD_SET_SENSOR_STATE">
+        <description>Set the switch state(s) ON, OFF, STANDBY (Low Power)</description>
+        <param index="1">Switch/Sensor State per component id (0=Off, 1=On, 2=StandBy)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="28" name="MAVNET_CMD_SET_FLOWRATE">
+        <description>Sets the desired flow rate of the target component</description>
+        <param index="1">Flow rate setpoint in SCCM (cm^3/min at 0C, 1bar)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="29" name="MAVNET_CMD_SET_TETHER">
+        <description>Set the tether state to hold or release.</description>
+        <param index="1">Tether state (0=Release, 1=Hold)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="50" name="MAVNET_CMD_MISSION_RUN">
+        <description>Run the currently loaded mission.</description>
+        <param index="1">Mission sequence number at which to start execution.</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Start height AHL (Altitude above home level), in meters * 1000 (0 for current)</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="51" name="MAVNET_CMD_MISSION_STOP">
+        <description>Stop the currently running mission.</description>
+        <param index="1">Mission state (0=Keep, 1=Clear)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="52" name="MAVNET_CMD_MISSION_CONTINUE">
+        <description>Continue the currently loaded mission.</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="60" name="MAVNET_CMD_SET_HOME_POINT">
+        <description>MISSION - Define a home position</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Latitude (WGS84), in degrees * 1E7</param>
+        <param index="6">Longitude (WGS84), in degrees * 1E7</param>
+        <param index="7">AHL (Altitude above home level), in meters * 1000 (positive for up)</param>
+      </entry>
+
+      <entry value="61" name="MAVNET_CMD_SET_RALLY_POINT">
+        <description>MISSION - Define a rally point</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Latitude (WGS84), in degrees * 1E7</param>
+        <param index="6">Longitude (WGS84), in degrees * 1E7</param>
+        <param index="7">AHL (Altitude above home level), in meters * 1000 (positive for up)</param>
+      </entry>
+
+      <entry value="62" name="MAVNET_CMD_DELAY">
+        <description>MISSION_LOOP - Delay mission execution for a period of time or indefinitely. </description>
+        <param index="1">DelayTime (-1: Infinite pause, &gt; 1: delay for the specified period)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="63" name="MAVNET_CMD_TARGET_FOLLOW">
+        <description>MISSION_LOOP - Set a target system for the mission executor to follow.</description>
+        <param index="1">Target system_id (1-254), 0 clears the follow</param>
+        <param index="2">Standoff distance (0-1000 meters)</param>
+        <param index="3">Standoff bearing (rel to true north 0-360)</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="64" name="MAVNET_CMD_SET_INTERVAL">
+        <description>Change the interval of MAVLink messages.</description>
+        <param index="1">Message id (0=HEARTBEAT, 1=Asset State Message</param>
+        <param index="2">Cellular Interval in microseconds</param>
+        <param index="3">Satellite Interval in microseconds</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="65" name="MAVNET_CMD_SET_COMM_MODE">
+        <description>Change the communication mode of radios.</description>
+        <param index="1">Line of sight radio (as described by COMM_MODE enum, other=IGNORE)</param>
+        <param index="2">Internet/Cellular (as described by COMM_MODE enum, other=IGNORE)</param>
+        <param index="3">Satellite (as described by COMM_MODE enum, other=IGNORE)</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">State Messages (as described by COMM_MODE enum, other=IGNORE)</param>
+      </entry>
+
+      <entry value="70" name="MAVNET_CMD_IDENTIFY">
+        <description>Request a system to send it's COMM_REGISTRATION information.</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="71" name="MAVNET_CMD_VIDEO">
+        <description>Request to start or stop a video system.</description>
+        <param index="1">(0=OFF, 1=ON, other=IGNORE)</param>
+        <param index="2">Camera ID</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+       
+      <entry value="72" name="MAVNET_CMD_CAMERA_TRIGGER">
+        <description>Request to save a still image.</description>
+        <param index="1">Camera ID</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="73" name="MAVNET_CMD_COMPASS_CALIBRATE">
+        <description>Start a compass calibration process.</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="74" name="MAVNET_CMD_SET_COMPASS_DEC">
+        <description>Sets the compass declination parameter on an ardupilot system. (-3.14 3.14) radians * 100.</description>
+        <param index="1">Declination in Radians * 100</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <!-- 75,76 is reserved for MAVNET_CMD_OP_TRACK/UNTRACK -->
+
+      <entry value="77" name="MAVNET_CMD_SET_GROUPID">
+        <description>Sets the group ID of the target component</description>
+        <param index="1">Group ID</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="78" name="MAVNET_CMD_SET_CESER_STATE">
+        <description>Sets the state of the CESER acquisition process.</description>
+        <param index="1">Acquisition State (0=Stop, 1=Start)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="79" name="MAVNET_CMD_SET_PERCENT_SPEED">
+        <description>Sets the a speed with 0-100%.</description>
+        <param index="1">Speed (0 - 100)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+      
+      <entry value="80" name="MAVNET_CMD_SET_CAMERAGIMBAL_MODE">
+        <description>Set the Camera Gimbals pointing mode.</description>
+        <param index="1">Mode (as described by SENSOR_CAMERAGIMBAL_MODE_FLAG enum, other=IGNORE)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+      
+      <entry value="81" name="MAVNET_CMD_SET_CAMERAGIMBAL_VIDEO">
+        <description>Set the Camera Gimbals video mode.</description>
+        <param index="1">Mode (as described by SENSOR_CAMERAGIMBAL_VIDEO_FLAG enum, other=IGNORE)</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+     <entry value="82" name="MAVNET_CMD_SET_CAMERAGIMBAL_RECORD">
+        <description>Turns on or off local video recording on the Camera Gimbal.</description>
+        <param index="1">(0=Stop Recording, 1=Start Recording, other=IGNORE)</param>
+        <param index="2">(1=Take Snapshot, other=IGNORE)</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+      
+      <entry value="83" name="MAVNET_CMD_SET_CAMERAGIMBAL_POSITION">
+        <description>Sets the Camera Gimbal manual position incrementally.</description>
+        <param index="1">Roll (-1=increment left, 0=No movement, 1=increment right)</param>
+        <param index="2">Pitch (-1=increment down, 0=No movement, 1=increment up)</param>
+        <param index="3">Zoom (-1=increment out, 0=No movement, 1=increment in)</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>
+
+      <entry value="84" name="MAVNET_CMD_SENSOR_CMD">
+        <description>Sends a command to the SensorManager</description>
+        <param index="1">Cmd (as described by SENSORMGR_CMDS enum)</param>
+        <param index="2">Sensor Component ID (Zero for ALL Sensors)</param>
+        <param index="3">Param 3 (Cmd dependent)</param>
+        <param index="4">Param 4 (Cmd dependent)</param>
+        <param index="5">Param 5 (Cmd dependent)</param>
+        <param index="6">Param 6 (Cmd dependent)</param>
+        <param index="7">Param 7 (Cmd dependent)</param>
+      </entry>
+      
+      <entry value="85" name="MAVNET_CMD_BEGIN_LAND_SEQ">
+        <description>A mission placeholder that indicates the beginning of the landing sequence.</description>
+        <param index="1">Empty</param>
+        <param index="2">Empty</param>
+        <param index="3">Empty</param>
+        <param index="4">Empty</param>
+        <param index="5">Empty</param>
+        <param index="6">Empty</param>
+        <param index="7">Empty</param>
+      </entry>  
+      
+      </enum>
+  </enums>
+
+  <messages>
+    <message id="43000" name="MAVNET_COMMAND">
+      <description>Send a command with up to seven parameters to an MAVNet system.</description>
+      <field type="uint8_t" name="target_system">System which should execute the command</field>
+      <field type="uint8_t" name="target_component">Target Component ID which should execute the command</field>
+      <field type="uint32_t" name="command_sequence">The command state sequence number against which this command should apply</field>
+      <field type="uint16_t" name="mission_sequence">The mission sequence number for this command (0: Not applied to a mission, greater than 0: mission step)</field>
+      <field type="uint16_t" name="command" enum="MAVNET_CMD">Command ID, as defined by MAVNET_CMD enum.</field>
+      <field type="int32_t" name="param1">Parameter 1, as defined by MAVNET_CMD enum.</field>
+      <field type="int32_t" name="param2">Parameter 2, as defined by MAVNET_CMD enum.</field>
+      <field type="int32_t" name="param3">Parameter 3, as defined by MAVNET_CMD enum.</field>
+      <field type="int32_t" name="param4">Parameter 4, as defined by MAVNET_CMD enum.</field>
+      <field type="int32_t" name="param5">Parameter 5, as defined by MAVNET_CMD enum.</field>
+      <field type="int32_t" name="param6">Parameter 6, as defined by MAVNET_CMD enum.</field>
+      <field type="int32_t" name="param7">Parameter 7, as defined by MAVNET_CMD enum.</field>
+    </message>
+
+    <message id="43001" name="MAVNET_COMM_GROUP_CONFIGURATION">
+      <description>MAVNet comms configuration - sent from the server to configure a comm system.</description>
+      <field type="uint8_t" name="mavlink_id">Mavlink unit ID for this system.</field>
+      <field type="char[16]" name="comm_group_name">Name of the comm group the system has joined.</field>
+      <field type="char[24]" name="callsign">The callsign for this system.</field>
+    </message>
+
+    <message id="43002" name="MAVNET_PARAM_REQUEST_READ">
+      <description>Request to broadcast the correspondung MAVNET_PARAM_STATE* for the asset.</description>
+      <field type="uint8_t" name="target_system">System which should execute the command</field>
+      <field type="uint8_t" name="target_component">Component ID</field>
+    </message>
+
+    <!-- 43003, 43004 and 43005 are unused -->
+
+    <message id="43006" name="MAVNET_MESSAGE">
+      <description>Used for sending important system messages between assets and GCSs.</description>
+      <field type="uint8_t" name="severity" enum="MAV_SEVERITY">Severity of message. See enum MAV_SEVERITY.</field>
+      <field type="char[50]" name="text">ASCII encoded system message</field>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (UNIX epoch based on GPS)</field>
+    </message>
+
+    <message id="43007" name="MAVNET_MISSION_TRANSFER">
+      <description>A message informing an MAVNet system to transfer a mission to or from a requestor.</description>
+      <field type="uint8_t" name="target_system">System which should transfer the mission.</field>
+      <field type="uint32_t" name="command_sequence">The command state sequence number against which this command should apply.</field>
+      <field type="uint8_t" name="transfer_direction">Direction of the mission transfer (0: Upload to MAVNet, 1: Download from MAVNet)</field>
+      <field type="uint8_t[16]" name="mission_id">ID (MD5 hash) of the mission to be transfered.</field>
+      <field type="char[16]" name="mission_name">Ascii encoded name of the mission.</field>
+      <field type="uint16_t" name="mission_parts">The number of individual mission commands that are part of the mission.</field>
+    </message>
+
+    <message id="43008" name="MAVNET_COMM_REGISTRATION">
+      <description>MAVNet Comms registration message (sent on system startup and at regular intervals).</description>
+      <field type="uint8_t" name="system_type">The type of the system (see: MAVNET_SYSTEM_TYPE)</field>
+      <field type="char[16]" name="comm_group_name">Name of the comm group the as defined on the local system.</field>
+      <field type="char[24]" name="serial_number">The serial number of the comm system which is based on the system factory serial number.</field>
+      <field type="char[24]" name="callsign">The callsign for this system.</field>
+      <field type="uint32_t" name="micro_hard_id">Placeholder for microhard information, currently not implemented.</field>
+    </message>
+
+    <message id="43009" name="MAVNET_STATE_COPTER">
+      <description>MAVNet state message for a *copter.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="system_type" enum="MAV_TYPE">Type of the system defined in MAV_TYPE ENUM</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>
+      <field type="uint8_t" name="subscription">System id of the device to which we wish to subscribe. (0: none, 255: all)</field>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+
+      <!-- MAVNet State -->
+      <field type="uint8_t" name="fly">Fly state parameter (0:false, 1: true)</field>
+      <field type="uint8_t" name="pause">Pause state parameter (0: false, 1: true)</field>
+      
+      <field type="int32_t" name="destination_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="destination_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="destination_altitude_ahl" units="mm">Altitude above home level (positive for up)</field>
+
+      <field type="int32_t" name="target_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="target_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="target_altitude_ahl" units="mm">Altitude above home level (positive for up)</field>
+
+      <field type="int32_t" name="home_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="home_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="home_altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+
+      <field type="uint8_t" name="speed" units="dm/s">Speed setpoint</field>
+        <field type="int32_t" name="immediate_altitude_ahl" units="mm">Immediate altitude setpoint above home level (positive for up)</field>
+      <field type="uint8_t" name="flags" enum="ASSET_STATE_FLAG" display="bitmask">Asset state bitmap.</field>
+      <field type="uint32_t" name="estimated_run_time" units="s">Estimate of remaining operation time (0: no estimate, 0xFFFFFFFF: no battery)</field>
+
+      <!-- readback of SET_INTERVAL -->
+      <field type="int32_t" name ="interval_cell" units="us">The interval between each STATE message when on cellular or WiFi</field>
+      <field type="int32_t" name ="interval_sat" units="us">The interval between each STATE message when on satellite</field>
+
+      <!-- Parameters -->
+      <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Mission -->
+      <field type="uint8_t[16]" name="mission_id">ID of the currently executing mission (MD5 hash)</field>
+      <field type="uint8_t" name="mission_active">MAVNet mission active flag (0:false, 1: true)</field>
+      <field type="int32_t" name="mission_delay">Current delay timer in seconds (-1: Infinite delay, 0: No delay, >1 delay sec)</field>
+      <field type="uint16_t" name="mission_sequence">Execution point in the current mission</field>
+      <field type="int8_t" name="mission_upload">Status of a mission upload (-1: No upload, 0-100: percent complete)</field>
+
+      <!-- Comms Status -->
+      <field type="int8_t" name="transmit_interface" enum="COMM_INTERFACE">The interface transmitting this message</field>
+      <field type="int8_t" name="los_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="cellular_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="satellite_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+
+      <!-- From HEARTBEAT -->
+      <field type="uint8_t" name="base_mode" enum="MAV_MODE_FLAG" display="bitmask">System mode bitfield, see MAV_MODE_FLAG ENUM in mavlink/include/mavlink_types.h</field>
+      <field type="uint32_t" name="custom_mode">A bitfield for use for autopilot-specific flags.</field>
+      <field type="uint8_t" name="system_status" enum="MAV_STATE">System status flag, see MAV_STATE ENUM</field>
+
+      <!-- From GLOBAL_POSITION_INT -->
+      <field type="int32_t" name="latitude" units="degE7">Latitude</field>
+      <field type="int32_t" name="longitude" units="degE7">Longitude</field>
+      <field type="int32_t" name="altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+      <!-- From GPS_RAW_INT -->
+      <field type="uint8_t" name="gps_fix_type" enum="GPS_FIX_TYPE">See the GPS_FIX_TYPE enum.</field>
+      <field type="uint8_t" name="gps_satellites_visible">Number of satellites visible. If unknown, set to 255</field>
+      <field type="uint32_t" name="h_acc" units="mm">Horizontal position uncertainty</field>
+      <field type="uint32_t" name="v_acc" units="mm">Vertical position uncertainty</field>
+
+      <field type="uint32_t" name="vel_acc" units="mm">Speed uncertainty</field>
+      <field type="uint32_t" name="hdg_acc" units="degE5">Heading / track uncertainty</field>
+
+      <!-- From VFR_HUD -->
+      <field type="float" name="groundspeed" units="m/s">Current ground speed</field>
+      <field type="int16_t" name="heading" units="deg">Current heading, in compass units (0..360, 0=north)</field>
+  
+      <!-- From SYS_STATUS -->
+      <field type="uint16_t" name="voltage_battery" units="mV">Battery voltage (0: no information)</field>
+      <field type="int8_t" name="battery_remaining" units="%">Remaining battery energy, -1: not available</field>
+
+      <!-- Asset Type Specific -->
+      <!-- controller specific fields -->
+      <field type="int16_t[2]" name="system_temperature" units="degE2">CPU [0], Board [1] temperature (Celsius)</field>
+      <!-- From EKF_STATUS_REPORT -->
+      <field type="uint16_t" name="ekf_status_flags" enum="EKF_STATUS_FLAGS" display="bitmask">EKF status flags</field>
+      <!-- From sensors -->
+      <field type="int32_t" name="altitude_ahl" units="mm">Altitude above home level (positive for up)</field>
+      <field type="int32_t" name="altitude_agl" units="mm">Altitude above ground level (positive for up)</field>
+      <field type="float" name="airspeed" units="m/s">Current airspeed</field>
+      <field type="int16_t" name="roll" units="degE2">Roll</field>
+      <field type="int16_t" name="pitch" units="degE2">Pitch</field>
+    </message>
+
+    <message id="43010" name="MAVNET_STATE_ROVER">
+      <description>MAVNet state message for a rover.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="system_type" enum="MAV_TYPE">Type of the system defined in MAV_TYPE ENUM</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>
+      <field type="uint8_t" name="subscription">System id of the device to which we wish to subscribe. (0: none, 255: all)</field>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (UNIX epoch based on GPS)</field>
+
+      <!-- MAVNet State -->
+      <field type="uint8_t" name="pause">Pause state parameter (0: false, 1: true)</field>
+
+      <field type="int32_t" name="destination_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="destination_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="destination_altitude_ahl" units="mm">Altitude above home level (positive for up)</field>
+
+      <field type="int32_t" name="target_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="target_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="target_altitude_ahl" units="mm">Altitude above home level (positive for up)</field>
+
+      <field type="int32_t" name="home_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="home_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="home_altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+
+      <field type="uint8_t" name="speed" units="dm/s">Speed setpoint</field>
+      <field type="uint8_t" name="flags" enum="ASSET_STATE_FLAG" display="bitmask">Asset state bitmap.</field>
+      <field type="uint32_t" name="estimated_run_time" units="s">Estimate of remaining operation time (0: no estimate, 0xFFFFFFFF: no battery)</field>
+
+      <!-- readback of SET_INTERVAL -->
+      <field type="int32_t" name ="interval_cell" units="us">The interval between each STATE message when on cellular or WiFi</field>
+      <field type="int32_t" name ="interval_sat" units="us">The interval between each STATE message when on satellite</field>
+
+      <!-- Parameters -->
+      <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Mission -->
+      <field type="uint8_t[16]" name="mission_id">ID of the currently executing mission (MD5 hash)</field>
+      <field type="uint8_t" name="mission_active">MAVNet mission active flag (0:false, 1: true)</field>
+      <field type="int32_t" name="mission_delay">Current delay timer in seconds (-1: Infinite delay, 0: No delay, >1 delay sec)</field>
+      <field type="uint16_t" name="mission_sequence">Execution point in the current mission</field>
+      <field type="int8_t" name="mission_upload">Status of a mission upload (-1: No upload, 0-100: percent complete)</field>
+
+      <!-- Comms Status -->
+      <field type="int8_t" name="transmit_interface" enum="COMM_INTERFACE">The interface transmitting this message</field>
+      <field type="int8_t" name="los_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="cellular_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="satellite_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+
+      <!-- From HEARTBEAT -->
+      <field type="uint8_t" name="base_mode" enum="MAV_MODE_FLAG" display="bitmask">System mode bitfield, see MAV_MODE_FLAG ENUM in mavlink/include/mavlink_types.h</field>
+      <field type="uint32_t" name="custom_mode">A bitfield for use for autopilot-specific flags.</field>
+      <field type="uint8_t" name="system_status" enum="MAV_STATE">System status flag, see MAV_STATE ENUM</field>
+
+      <!-- From GLOBAL_POSITION_INT -->
+      <field type="int32_t" name="latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+      <!-- From GPS_RAW_INT -->
+      <field type="uint8_t" name="gps_fix_type" enum="GPS_FIX_TYPE">See the GPS_FIX_TYPE enum.</field>
+      <field type="uint8_t" name="gps_satellites_visible">Number of satellites visible. If unknown, set to 255</field>
+      <field type="uint32_t" name="h_acc" units="mm">Horizontal position uncertainty</field>
+      <field type="uint32_t" name="v_acc" units="mm">Vertical position uncertainty</field>
+
+      <!-- From VFR_HUD -->
+      <field type="float" name="groundspeed" units="m/s">Current ground speed</field>
+      <field type="int16_t" name="heading" units="deg">Current heading, in compass units (0..360, 0=north)</field>
+
+      <!-- From SYS_STATUS -->
+      <field type="uint16_t" name="voltage_battery" units="mV">Battery voltage (0: no information)</field>
+      <field type="int8_t" name="battery_remaining" units="%">Remaining battery energy, -1: not available</field>
+
+      <!-- Asset Type Specific -->
+      <!-- controller specific fields -->
+      <field type="int16_t[2]" name="system_temperature" units="degE2">CPU [0], Board [1] temperature (Celsius)</field>
+    </message>
+
+    <message id="43011" name="MAVNET_STATE_PLANE">
+      <description>MAVNet state message for a fixed-wing, quadplane, VTOL.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="system_type" enum="MAV_TYPE">Type of the system defined in MAV_TYPE ENUM</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>
+      <field type="uint8_t" name="subscription">System id of the device to which we wish to subscribe. (0: none, 255: all)</field>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+
+      <!-- MAVNet State -->
+      <field type="uint8_t" name="fly">Fly state parameter (0:false, 1: true)</field>
+      <field type="uint8_t" name="pause">Pause state parameter (0: false, 1: true)</field>
+
+      <field type="int32_t" name="destination_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="destination_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="destination_altitude_ahl" units="mm">Altitude above home level (positive for up)</field>
+
+      <field type="int32_t" name="target_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="target_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="target_altitude_ahl" units="mm">Altitude above home level (positive for up)</field>
+
+      <field type="int32_t" name="home_latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="home_longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="home_altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+
+      <field type="uint8_t" name="speed" units="dm/s">Speed setpoint</field>
+      <field type="int32_t" name="immediate_altitude_ahl" units="mm">Immediate altitude setpoint above home level (positive for up)</field>
+      <field type="uint8_t" name="flags" enum="ASSET_STATE_FLAG" display="bitmask">Asset state bitmap.</field>
+      <field type="uint32_t" name="estimated_run_time" units="s">Estimate of remaining operation time (0: no estimate, 0xFFFFFFFF: no battery)</field>
+
+      <!-- readback of SET_INTERVAL -->
+      <field type="int32_t" name ="interval_cell" units="us">The interval between each STATE message when on cellular or WiFi</field>
+      <field type="int32_t" name ="interval_sat" units="us">The interval between each STATE message when on satellite</field>
+
+      <!-- Parameters -->
+      <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Mission -->
+      <field type="uint8_t[16]" name="mission_id">ID of the currently executing mission (MD5 hash)</field>
+      <field type="uint8_t" name="mission_active">MAVNet mission active flag (0:false, 1: true)</field>
+      <field type="int32_t" name="mission_delay">Current delay timer in seconds (-1: Infinite delay, 0: No delay, >1 delay sec)</field>
+      <field type="uint16_t" name="mission_sequence">Execution point in the current mission</field>
+      <field type="int8_t" name="mission_upload">Status of a mission upload (-1: No upload, 0-100: percent complete)</field>
+
+      <!-- Comms Status -->
+      <field type="int8_t" name="transmit_interface" enum="COMM_INTERFACE">The interface transmitting this message</field>
+      <field type="int8_t" name="los_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="cellular_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="satellite_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+
+      <!-- From HEARTBEAT -->
+      <field type="uint8_t" name="base_mode" enum="MAV_MODE_FLAG" display="bitmask">System mode bitfield, see MAV_MODE_FLAG ENUM in mavlink/include/mavlink_types.h</field>
+      <field type="uint32_t" name="custom_mode">A bitfield for use for autopilot-specific flags.</field>
+      <field type="uint8_t" name="system_status" enum="MAV_STATE">System status flag, see MAV_STATE ENUM</field>
+
+      <!-- From GLOBAL_POSITION_INT -->
+      <field type="int32_t" name="latitude" units="degE7">Latitude</field>
+      <field type="int32_t" name="longitude" units="degE7">Longitude</field>
+      <field type="int32_t" name="altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+      <!-- From GPS_RAW_INT -->
+      <field type="uint8_t" name="gps_fix_type" enum="GPS_FIX_TYPE">See the GPS_FIX_TYPE enum.</field>
+      <field type="uint8_t" name="gps_satellites_visible">Number of satellites visible. If unknown, set to 255</field>
+
+      <!-- From VFR_HUD -->
+      <field type="float" name="groundspeed" units="m/s">Current ground speed</field>
+      <field type="int16_t" name="heading" units="deg">Current heading, in compass units (0..360, 0=north)</field>
+
+      <!-- From Approx. Wind -->
+      <field type="int16_t" name="wind_direction" units="deg">Wind direction (that wind is coming from).</field>
+      <field type="float"   name="wind_speed" units="m/s">Wind speed in ground plane.</field>
+      <field type="float"   name="wind_vertical_speed" units="m/s">Vertical wind speed.</field>
+
+      <!-- From SYS_STATUS -->
+      <field type="uint16_t" name="voltage_battery" units="mV">Battery voltage (0: no information)</field>
+      <field type="int8_t" name="battery_remaining" units="%">Remaining battery energy, -1: not available</field>
+
+      <!-- Asset Type Specific -->
+      <!-- controller specific fields -->
+      <field type="int16_t[2]" name="system_temperature" units="degE2">CPU [0], Board [1] temperature (Celsius)</field>
+      <!-- From EKF_STATUS_REPORT -->
+      <field type="uint16_t" name="ekf_status_flags" enum="EKF_STATUS_FLAGS">EKF status flags</field>
+      <!-- From sensors -->
+      <field type="int32_t" name="altitude_ahl" units="mm">Altitude above home level (positive for up)</field>
+      <field type="int32_t" name="altitude_agl" units="mm">Altitude above ground level (positive for up)</field>
+      <field type="float" name="airspeed" units="m/s">Current airspeed</field>
+      <field type="int16_t" name="roll" units="degE2">Roll</field>
+      <field type="int16_t" name="pitch" units="degE2">Pitch</field>
+      <!-- Plane -->
+      <field type="int16_t" name="heading_sp" units="degE2">Heading setpoint</field>
+      <field type="uint8_t" name="airspeed_sp" units="m/s">Airspeed setpoint</field>
+      <field type="int8_t" name="climb_rate" units="m/s">Climb rate</field>
+    </message>
+
+    <message id="43012" name="MAVNET_STATE_RELAY">
+      <description>Data from a communications relay device.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="system_type" enum="MAV_TYPE">Type of the system defined in MAV_TYPE ENUM</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>
+      <field type="uint8_t" name="subscription">System id of the device to which we wish to subscribe. (0: none, 255: all)</field>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (UNIX epoch based on GPS)</field>
+
+      <!-- MAVNet State -->
+
+      <!-- readback of SET_INTERVAL -->
+      <field type="int32_t" name ="interval_cell" units="us">The interval between each STATE message when on cellular or WiFi</field>
+      <field type="int32_t" name ="interval_sat" units="us">The interval between each STATE message when on satellite</field>
+
+      <!-- Parameters -->
+      <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Comms Status -->
+      <field type="int8_t" name="transmit_interface" enum="COMM_INTERFACE">The interface transmitting this message</field>
+      <field type="int8_t" name="los_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="cellular_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="satellite_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+
+      <!-- Location (NULL if unavailable) -->
+      <field type="int32_t" name="latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+      <field type="uint8_t" name="gps_fix_type" enum="GPS_FIX_TYPE">See the GPS_FIX_TYPE enum.</field>
+      <field type="uint8_t" name="gps_satellites_visible">Number of satellites visible. If unknown, set to 255</field>
+      <field type="uint8_t" name="gps_state" enum="GPS_STATE">GPS State</field>
+
+      <!-- From SYS_STATUS -->
+      <field type="uint16_t" name="voltage_battery" units="mV">Battery voltage (0: no information)</field>
+      <field type="int8_t" name="battery_remaining" units="%">Remaining battery energy, -1: not available</field>
+      <field type="int16_t" name="system_temperature" units="degE2">CPU (Celsius)</field>
+
+      <!-- Asset Type Specific -->
+    </message>
+
+    <message id="43013" name="MAVNET_STATE_BEACON">
+      <description>Data from a beacon device, typically a cellphone running UVDL tracking software.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="system_type" enum="MAV_TYPE">Type of the MAV defined in MAV_TYPE ENUM, Added so this message can be used standalone in LB environments</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>
+      <field type="uint8_t" name="subscription">System id of the device to which we wish to subscribe. (0: none, 255: all)</field>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (UNIX epoch based on GPS)</field>
+
+      <!-- FIXME: MAVNet state message protocol includes these fields, MAVNET_STATE_BEACON is missing them
+      <field type="uint32_t" name="estimated_run_time" units="s">Estimate of remaining operation time (0: no estimate, 0xFFFFFFFF: no battery)</field>
+      -->
+
+      <!-- readback of SET_INTERVAL -->
+      <field type="int32_t" name ="interval_cell" units="us">The interval between each STATE message when on cellular or WiFi</field>
+      <field type="int32_t" name ="interval_sat" units="us">The interval between each STATE message when on satellite</field>
+
+      <!-- Parameters -->
+      <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Comms Status -->
+      <field type="int8_t" name="transmit_interface" enum="COMM_INTERFACE">The interface transmitting this message</field>
+      <field type="int8_t" name="los_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="cellular_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="satellite_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+
+      <!-- Location (NULL if unavailable) -->
+      <field type="int32_t" name="latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+      <field type="uint8_t" name="gps_fix_type" enum="GPS_FIX_TYPE">See the GPS_FIX_TYPE enum.</field>
+      <field type="uint8_t" name="gps_satellites_visible">Number of satellites visible. If unknown, set to 255</field>
+      <field type="uint8_t" name="gps_state" enum="GPS_STATE">GPS State </field>            
+      <field type="float"   name="groundspeed" units="m/s">Current ground speed</field>
+      <field type="int16_t" name="heading" units="deg">Current heading, in compass units (0..360, 0=north)</field>
+
+      <!-- From SYS_STATUS -->
+      <field type="uint16_t" name="voltage_battery" units="mV">Battery voltage (0: no information)</field>
+      <field type="int8_t"  name="battery_remaining" units="%">Remaining battery energy, -1: not available</field>
+      <field type="int16_t" name="system_temperature" units="degE2">CPU (Celsius)</field>
+
+      <!-- Asset Type Specific -->
+    </message>
+	
+    <message id="43015" name="MAVNET_STATE_WEATHERPAK">
+      <description>Data from the MAVNet Weather station interface.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="system_type" enum="MAV_TYPE">Type of the MAV defined in MAV_TYPE ENUM, Added so this message can be used standalone in LB environments</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>
+      <field type="uint8_t" name="subscription">System id of the device to which we wish to subscribe. (0: none, 255: all)</field>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (UNIX epoch based on GPS)</field>
+
+      <!-- MAVNet State -->
+      <field type="uint32_t" name="estimated_run_time" units="s">Estimate of remaining operation time (0: no estimate, 0xFFFFFFFF: no battery)</field>
+
+      <!-- readback of SET_INTERVAL -->
+      <field type="int32_t" name ="interval_cell" units="us">The interval between each STATE message when on cellular or WiFi</field>
+      <field type="int32_t" name ="interval_sat" units="us">The interval between each STATE message when on satellite</field>
+
+      <!-- Parameters -->
+      <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Comms Status -->
+      <field type="int8_t" name="transmit_interface" enum="COMM_INTERFACE">The interface transmitting this message</field>
+      <field type="int8_t" name="los_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="cellular_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int8_t" name="satellite_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+
+      <!-- Location (NULL if unavailable) -->
+      <field type="int32_t" name="latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+      <!-- From GPS_RAW_INT -->
+      <field type="uint8_t" name="gps_fix_type" enum="GPS_FIX_TYPE">See the GPS_FIX_TYPE enum.</field>
+      <field type="uint8_t" name="gps_satellites_visible">Number of satellites visible. If unknown, set to 255</field>
+      <field type="uint32_t" name="h_acc" units="mm">Horizontal position uncertainty</field>
+      <field type="uint32_t" name="v_acc" units="mm">Vertical position uncertainty</field>
+
+      <!-- From SYS_STATUS -->
+      <field type="uint16_t" name="voltage_battery" units="mV">Battery voltage (0: no information)</field>
+      <field type="int8_t" name="battery_remaining" units="%">Remaining battery energy, -1: not available</field>
+
+      <!-- Asset Type Specific -->
+      <!-- controller specific fields -->
+      <field type="int16_t[2]" name="system_temperature" units="degE2">CPU [0], Board [1] temperature (Celsius)</field>
+      <!-- system mode -->
+      <field type="uint8_t" name="system_mode">Current operating mode of the system based on SWITCH_MODE enum</field>
+      <!-- Weatherpak specific fields -->
+      <field type="uint32_t" name="serial_number">The weather sensor unit serial number</field>         
+      <field type="float" name="wind_speed">Integrated wind speed in (m/s)</field>
+      <field type="float" name="wind_direction">Integrated wind direction (degrees)</field>
+      <field type="float" name="wind_std_dev">Wind standard deviation</field>
+      <field type="int16_t" name="temperature" units="degE2">Integrated/average temperature measurement (Celsius)</field>
+      <field type="float" name="magnet_heading">Current orientation in degrees, in compass units (0..360, 0=north)</field>
+      <field type="float" name="press_abs">Barometric pressure (hectopascal)</field>
+      <field type="float" name="relative_humidity">Relative humidity (percent)</field>
+    </message>
+      
+    <message id="43020" name="MAVNET_PARAM_COPTER">
+      <description>Change/report parameters for a COPTER asset; used to compute the parameter hash.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="target_system">System which should execute the command.  0 if asset is reporting parameters.</field>
+      <field type="uint32_t" name="command_sequence">The command state sequence number against which this command should apply.  0 if asset is reporting parameters.</field>
+
+      <!-- UI Adjustable Fields  -->
+      <field type="uint16_t" name="wp_radius" units="cm">Radius of the waypoint acceptance criteria (0-8000)</field>
+      <field type="uint8_t" name="fs_batt_enable">Enable (1) or disable (0) the battery failsafe</field>
+      <field type="uint16_t" name="fs_batt_voltage" units="mV">Battery failsafe voltage</field>
+      <field type="uint8_t" name="fence_enable">Enable (1) or disable (0) the geofence</field>
+      <field type="uint16_t" name="fence_alt_max" units="m">Altitude of the geofence (10-1000)</field>
+      <field type="uint16_t" name="fence_radius" units="m">Radius of the geofence (30-10000)</field>
+      <field type="uint16_t" name="rtl_alt" units="cm">RTL altitude (0-8000)</field>
+      <field type="uint8_t" name="fs_thr_enable">Enable (1) or disable (0) the hand radio failsafe</field>
+      <field type="uint16_t" name="wpnav_speed" units="cm/s">Vehicle speed in auto and guided modes (20-2000)</field>
+      <field type="uint8_t" name="fs_ekf_action">Failsafe behavior at EKF failsafe (gps, compass or other sensor failure). 1 = Land, 2 = AltHold, 3 = Land even in Stabilize</field>
+      <field type="uint8_t" name="fs_rangefinder">Enable (1) or disable (0) the rangefinder failsafe. If enabled, then the vehicle will enter brake mode if altitude is less than the specified altitude and the vehicle is in GUIDED mode.</field>
+      <field type="uint16_t" name="fs_rangefinder_alt" units="m">Altitude of the rangefinder failsafe (1-200)</field>
+      <field type="uint8_t" name="batt_num_cells">Number of cells used in the battery (1-12).  Read-only when ARMED or if using a smart battery.</field>
+      <field type="uint8_t" name="mavlink_enable">Enable (1) or disable (0) the MAVLink pass-thru port. If enabled, a GCS connection will be allowed and MAVNet will engage/disengage as appropriate.</field>
+      <field type="uint32_t" name="tether_length_max" units="cm">Length of the tether (0, 100-40000).  Read-only.</field>
+
+      <!-- Rally Points -->
+      <field type="int32_t" name="rally_point_1_latitude" units="degE7">Rally point 1 Latitude (WGS84), 0 if unused</field>
+      <field type="int32_t" name="rally_point_1_longitude" units="degE7">Rally point 1 Longitude (WGS84), 0 if unused</field>
+      <field type="int16_t" name="rally_point_1_ahl" units="m">Rally point 1 Altitude above home level, 0 if unused</field>
+      <field type="int32_t" name="rally_point_2_latitude" units="degE7">Rally point 2 Latitude (WGS84), 0 if unused</field>
+      <field type="int32_t" name="rally_point_2_longitude" units="degE7">Rally point 2 Longitude (WGS84), 0 if unused</field>
+      <field type="int16_t" name="rally_point_2_ahl" units="m">Rally point 2 Altitude above home level, 0 if unused</field>
+    </message>
+
+    <message id="43021" name="MAVNET_PARAM_ROVER">
+      <description>Change/report parameters for a ROVER asset; used to compute the parameter hash.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="target_system">System which should execute the command.  0 if asset is reporting parameters.</field>
+      <field type="uint32_t" name="command_sequence">The command state sequence number against which this command should apply.  0 if asset is reporting parameters.</field>
+
+      <!-- UI Adjustable Fields  -->
+      <field type="uint16_t" name="wp_radius" units="cm">Radius of the waypoint acceptance criteria (0-8000)</field>
+      <field type="uint8_t" name="fs_batt_enable">Enable (1) or disable (0) the battery failsafe</field>
+      <field type="uint16_t" name="fs_batt_voltage" units="mV">Battery failsafe voltage</field>
+      <field type="uint8_t" name="fence_enable">Enable (1) or disable (0) the geofence</field>
+      <field type="uint16_t" name="fence_radius" units="m">Radius of the geofence (30-10000)</field>
+      <field type="uint8_t" name="fs_thr_enable">Enable (1) or disable (0) the hand radio failsafe</field>
+      <field type="uint16_t" name="wpnav_speed" units="cm/s">Vehicle speed in auto and guided modes (20-2000)</field>
+      <field type="uint8_t" name="fs_ekf_action">Failsafe Action 0:Nothing, 1:RTL, 2:Hold, 3:SmartRTL or RTL, 4:SmartRTL or Hold</field>
+      <field type="uint8_t" name="batt_num_cells">Number of cells used in the battery (1-12).  Read-only when ARMED or if using a smart battery.</field>
+      <field type="uint8_t" name="mavlink_enable">Enable (1) or disable (0) the MAVLink pass-thru port. If enabled, a GCS connection will be allowed and MAVNet will engage/disengage as appropriate.</field>
+
+      <!-- Rally Points -->
+      <field type="int32_t" name="rally_point_1_latitude" units="degE7">Rally point 1 Latitude (WGS84), 0 if unused</field>
+      <field type="int32_t" name="rally_point_1_longitude" units="degE7">Rally point 1 Longitude (WGS84), 0 if unused</field>
+      <field type="int16_t" name="rally_point_1_ahl" units="m">Rally point 1 Altitude above home level, 0 if unused</field>
+      <field type="int32_t" name="rally_point_2_latitude" units="degE7">Rally point 2 Latitude (WGS84), 0 if unused</field>
+      <field type="int32_t" name="rally_point_2_longitude" units="degE7">Rally point 2 Longitude (WGS84), 0 if unused</field>
+      <field type="int16_t" name="rally_point_2_ahl" units="m">Rally point 2 Altitude above home level, 0 if unused</field>
+    </message>
+
+    <message id="43022" name="MAVNET_PARAM_PLANE">
+      <description>Change/report parameters for a *PLANE asset; used to compute the parameter hash.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="target_system">System which should execute the command.  0 if asset is reporting parameters.</field>
+      <field type="uint32_t" name="command_sequence">The command state sequence number against which this command should apply.  0 if asset is reporting parameters.</field>
+
+      <!-- UI Adjustable Fields  -->
+      <field type="uint16_t" name="wp_radius" units="cm">Radius of the waypoint acceptance criteria (0-8000)</field>
+      <field type="uint8_t" name="fs_batt_enable">Enable (1) or disable (0) the battery failsafe</field>
+      <field type="uint16_t" name="fs_batt_voltage" units="mV">Battery failsafe voltage</field>
+      <field type="uint8_t" name="fence_enable">Enable (1) or disable (0) the geofence</field>
+      <field type="uint16_t" name="fence_alt_max" units="m">Altitude of the geofence (10-1000)</field>
+      <field type="uint16_t" name="fence_radius" units="m">Radius of the geofence (30-10000)</field>
+      <field type="uint16_t" name="rtl_alt" units="cm">RTL altitude (0-8000)</field>
+      <field type="uint8_t" name="fs_thr_enable">Enable (1) or disable (0) the hand radio failsafe</field>
+      <field type="uint16_t" name="wpnav_speed" units="cm/s">Vehicle speed in auto and guided modes (20-2000)</field>
+      <field type="uint8_t" name="fs_ekf_action">Failsafe behavior at EKF failsafe (gps, compass or other sensor failure). 1 = Land, 2 = AltHold, 3 = Land even in Stabilize</field>
+      <field type="uint8_t" name="fs_rangefinder">Enable (1) or disable (0) the rangefinder failsafe. If enabled, then the vehicle will enter brake/quadplane mode if altitude is less than the specified altitude and the vehicle is in GUIDED mode.</field>
+      <field type="uint16_t" name="fs_rangefinder_alt" units="m">Altitude of the rangefinder failsafe (1-200)</field>
+      <field type="uint8_t" name="batt_num_cells">Number of cells used in the battery (1-12).  Read-only when ARMED or if using a smart battery.</field>
+      <field type="uint8_t" name="mavlink_enable">Enable (1) or disable (0) the MAVLink pass-thru port. If enabled, a GCS connection will be allowed and MAVNet will engage/disengage as appropriate.</field>
+      <field type="uint32_t" name="tether_length_max" units="cm">Maximum length of the tether (0, 100-40000).  Read-only.</field>
+
+      <!-- Rally Points -->
+      <field type="int32_t" name="rally_point_1_latitude" units="degE7">Rally point 1 Latitude (WGS84), 0 if unused</field>
+      <field type="int32_t" name="rally_point_1_longitude" units="degE7">Rally point 1 Longitude (WGS84), 0 if unused</field>
+      <field type="int16_t" name="rally_point_1_ahl" units="m">Rally point 1 Altitude above home level, 0 if unused</field>
+      <field type="int32_t" name="rally_point_2_latitude" units="degE7">Rally point 2 Latitude (WGS84), 0 if unused</field>
+      <field type="int32_t" name="rally_point_2_longitude" units="degE7">Rally point 2 Longitude (WGS84), 0 if unused</field>
+      <field type="int16_t" name="rally_point_2_ahl" units="m">Rally point 2 Altitude above home level, 0 if unused</field>
+      
+      <!-- VTOL Transition Parameters -->
+      <field type="uint16_t" name="vtol_transition_alt" units="cm">For QPlane, VTOL to Plane Transition for take-offs and landing in AHL (altitude above Home)</field>
+    </message>
+
+    <message id="43023" name="MAVNET_PARAM_RELAY">
+      <description>Change/report parameters for a RELAY asset; used to compute the parameter hash.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="target_system">System which should execute the command.  0 if asset is reporting parameters.</field>
+      <field type="uint32_t" name="command_sequence">The command state sequence number against which this command should apply.  0 if asset is reporting parameters.</field>
+
+      <!-- UI Adjustable Fields  -->
+      <field type="uint8_t" name="fs_batt_enable">Enable (1) or disable (0) the battery failsafe</field>
+      <field type="uint16_t" name="fs_batt_voltage" units="mV">Battery failsafe voltage</field>
+      <field type="uint8_t" name="batt_num_cells">Number of cells used in the battery (1-12).  Read-only when ARMED or if using a smart battery.</field>
+    </message>
+
+    <message id="43024" name="MAVNET_PARAM_BEACON">
+      <description>Change/report parameters for a BEACON asset; used to compute the parameter hash.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="target_system">System which should execute the command.  0 if asset is reporting parameters.</field>
+      <field type="uint32_t" name="command_sequence">The command state sequence number against which this command should apply.  0 if asset is reporting parameters.</field>
+
+      <!-- UI Adjustable Fields  -->
+      <field type="uint8_t" name="fs_batt_enable">Enable (1) or disable (0) the battery failsafe</field>
+      <field type="uint16_t" name="fs_batt_voltage" units="mV">Battery failsafe voltage</field>
+      <field type="uint8_t" name="batt_num_cells">Number of cells used in the battery (1-12).  Read-only when ARMED or if using a smart battery.</field>
+    </message>
+
+    <message id="43025" name="MAVNET_PARAM_WEATHERPAK">
+      <description>Change/report parameters for a WEATHERPAK asset; used to compute the parameter hash.</description>
+
+      <!-- MAVNet Header -->
+      <field type="uint8_t" name="target_system">System which should execute the command.  0 if asset is reporting parameters.</field>
+      <field type="uint32_t" name="command_sequence">The command state sequence number against which this command should apply.  0 if asset is reporting parameters.</field>
+
+      <!-- UI Adjustable Fields  -->
+      <field type="uint8_t" name="fs_batt_enable">Enable (1) or disable (0) the battery failsafe</field>
+      <field type="uint16_t" name="fs_batt_voltage" units="mV">Battery failsafe voltage</field>
+      <field type="uint8_t" name="batt_num_cells">Number of cells used in the battery (1-12).  Read-only when ARMED or if using a smart battery.</field>
+    </message>
+
+    
+    <message id="43030" name="MAVNET_SENSOR_BATTERY">
+      <description>Data from a MAVNet Battery sensor which is a component of a MAVNet-provisioned device.</description>       
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+        <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Sensor specific fields -->
+      <field type="int16_t" name="temp">Temperature in C</field>
+      <field type="uint16_t" name="voltage">Voltage in mV</field>
+      <field type="int16_t" name="current">Current in mA</field>
+      <field type="int32_t" name="current_consumed">current consumed in mAH</field>
+      <field type="uint8_t" name="soc">Battery remaining percentage 0-100%</field>
+      <field type="int32_t" name="ttg">time remaining in minutes</field>
+      <field type="int8_t" name="error">MPPT Error message</field>
+      <field type="uint8_t" name="alarm">BVM Alarm message</field>
+      <field type="uint8_t" name="alarm_reason">BVM Alarm reason</field>
+      <!--add extensions here to handle future fields not addressed by the above-->
+    </message>
+
+    <message id="43031" name="MAVNET_SENSOR_FLOW">
+      <description>Data from a MAVNet Flow sensor which is a component of a MAVNet-provisioned device.</description>       
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+        <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Sensor specific fields -->
+      <field type="int32_t" name="actual">flow rate in SCCM (cm^3/min at 0C, 1bar)</field>
+      <!--add extensions here to handle future fields not addressed by the above-->
+    </message>
+
+    <message id="43032" name="MAVNET_SENSOR_SWITCH">
+      <description>Data from a MAVNet Switch/Relay device which is a component of a MAVNet-provisioned device.</description>       
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+        <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Sensor specific fields -->
+      <field type="uint8_t" name="status">status, on=1, off=0</field>   
+      <!--add extensions here to handle future fields not addressed by the above-->
+    </message>
+
+    <message id="43033" name="MAVNET_SENSOR_AC_CURRENT">
+      <description>Data from a MAVNet AC Current sensor which is a component of a MAVNet-provisioned device.</description>       
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+        <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Sensor specific fields -->
+      <field type="uint8_t" name="status">status, on=1, off=0</field>   
+      <field type="int32_t" name="current">Current in mA</field>
+      <field type="uint32_t" name="voltage">RMS Voltage in mV</field>
+      <!--add extensions here to handle future fields not addressed by the above-->
+    </message>
+
+    <message id="43034" name="MAVNET_SENSOR_DC_CURRENT">
+      <description>Data from a MAVNet DC Current sensor which is a component of a MAVNet-provisioned device.</description>       
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+        <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Sensor specific fields -->
+      <field type="uint8_t" name="status">status, on=1, off=0</field>   
+      <field type="int32_t" name="current">Current in mA</field>
+      <field type="uint32_t" name="voltage">Voltage in mV</field>
+      <!--add extensions here to handle future fields not addressed by the above-->
+    </message>
+
+    <message id="43035" name="MAVNET_SENSOR_WAES">
+      <description>Data from a MAVNet WAES sensor of a MAVNet-provisioned device.</description>       
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+        <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Sensor specific fields -->
+      <field type="uint8_t" name="status">status, on=1, off=0</field>   
+      <field type="int32_t" name="current_one">Current in mA</field>
+      <field type="uint32_t" name="voltage_one">Voltage in mV</field>
+      <field type="int32_t" name="current_two">Current in mA</field>
+      <field type="uint32_t" name="voltage_two">Voltage in mV</field>
+      <field type="uint32_t" name="fan">Voltage for fan tach</field>
+      <field type="uint32_t" name="flow">Voltage for flow sensor</field>
+      <field type="uint32_t" name="ambient_temp">Ambient temperature weather station</field>
+      <field type="uint32_t" name="barometric_pressure"> Weather station barometric pressure</field>
+      <field type="uint32_t" name="relative_humidity">Weather station relative humidity</field>
+      <field type="uint32_t" name="wind_speed">Speed in m/s</field>
+      <field type="uint32_t" name="wind_direction">Degrees</field>
+      <field type="uint8_t" name="wind_status">Wind sensor error field</field>
+      <!--add extensions here to handle future fields not addressed by the above-->
+    </message>
+    
+    
+    <message id="43056" name="MAVNET_SENSOR_RADEYE">
+      <description>Data from MAVNet RadEye sensor.</description>
+
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+      <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+      
+      <!-- Sensor specific fields -->
+      <field type="uint32_t" name="dose_rate_q1" units="uSv/hour E2">1st Quartile Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_rate_q2" units="uSv/hour E2">2nd Quartile Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_rate_q3" units="uSv/hour E2">3rd Quartile Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_rate_min" units="uSv/hour E2">Min. Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_rate_max" units="uSv/hour E2">Max. Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_max_time" units="sec">Max Timestamp (since UNIX epoch)</field>
+      <field type="uint16_t" name="count_rate_avg" units="cps">Avg Count Rate(cps)</field>
+      <field type="uint8_t"  name="voltage_battery_avg" units="Volts*10">Avg Battery Voltage</field>
+      <field type="int16_t"  name="temperature_avg" units="deg*10">Avg Probe temperature (Celsius)</field>
+    </message>
+
+    <message id="43058" name="MAVNET_SENSOR_KROMEK">
+      <description>Data from MAVNet Kromek sensor.</description>
+
+        <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+	  <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+      
+	<!-- Sensor specific fields -->
+	  <field type="uint8_t" name="battery_level" units="%">Battery Level</field>
+	  <field type="int16_t" name="unit_temperature" units="deg*10">Unit Temperature(Celsius)</field>
+	  <field type="uint32_t" name="dose_rate" units="uSv/hour E2">Avg Dose (uSv/hour E3)</field>
+	  <field type="uint32_t" name="dose_rate_peak" units="uSv/hour E2">Peak Dose (uSv/hour E3)</field>
+	  <field type="uint16_t" name="count_rate" units="cps">Avg. Count Rate(cps)</field>
+	  <field type="uint16_t" name="count_rate_peak" units="cps">Peak Count Rate(cps)</field>
+    </message>
+   
+    <message id="43062" name="MAVNET_SENSOR_GAMMATRACER">
+      <description>Data from MAVNet GammaTracer sensor.</description>
+
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+      <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+      
+      <!-- Sensor specific fields -->
+      <field type="uint32_t" name="dose_rate" units="uSv/hour E2">Dose Rate(hundredths usv/hour E2)</field>
+    </message>
+
+  <message id="43076" name="MAVNET_SENSOR_SONIC_TWO">
+      <description>Data from a MAVNet MetOne AIO Sonic 2 which is a component of a MAVNet-provisioned device.</description>       
+      <!-- Sensor Boilerplate -->
+      <field type="char[12]" name="serial_num">ASCII serial number of the sensor</field>
+      <field type="uint8_t" name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t" name="cycle_count">Count sensor power-up cycles.</field>
+      <field type="uint32_t" name="command_sequence">Provides information on the current executing command on the device</field>
+      <field type="int64_t" name="state_sequence">Incrementing sequence number, device is expected to increment with each msg and not repeat even with reboot</field>      
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (since UNIX epoch based on GPS)</field>
+        <field type="uint8_t[16]" name="param_hash">Hash of the currently loaded parameters (MD5 hash)</field>
+
+      <!-- Sensor specific fields -->
+      <field type="uint16_t" name="wind_speed" units="m/s">Wind Speed(multiplied by 100)</field>   
+      <field type="uint16_t" name="wind_direction" units="deg">Wind FROM direction</field>
+      <field type="int16_t" name="ambient_temp">multiplied by 10</field>
+      <field type="uint16_t" name="relative_humidity">Outside relative humidity</field>
+      <field type="uint16_t" name="barometric_pressure">multiplied by 10</field>
+      <field type="uint32_t" name="rain">multiplied by 100, rain fall</field>
+      <field type="uint16_t" name="solar_rad">Solar radiation</field>
+      <field type="uint8_t" name="battery_volt">multiplied by 10</field>
+      <field type="char[2]" name="weather_status">CONFIG status</field>
+      <!--add extensions here to handle future fields not addressed by the above-->
+      
+    </message>
+           
+    <message id="43081" name="MAVNET_SENSOR_EVENT">
+      <description>Submit a new Sensor Event. 135 Bytes, arranged so it likely ends with zeros making it smaller to transmit</description>
+      <field type="uint64_t"    name="event_time_usec" units="us">Time of Event, msec only</field>
+      <field type="char[12]"    name="serial_num">Serial number of the sensor, can determine SensorType, Platform, CommGroup, etc.</field>
+      <field type="uint8_t"     name="sensor" enum="SENSOR_TYPE" display="bitmask">Sensor type</field>
+      <field type="uint8_t"     name="flags" enum="MAVNET_SENSOR_FLAG" display="bitmask">Sensor behavior bitmap.</field>
+      <field type="uint8_t"     name="sensor_stale" units="decaSeconds">Sensor stale, defaults to 3 (30 seconds)</field>
+
+      <!-- Location of Event -->
+      <field type="int32_t"  name="latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t"  name="longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t"  name="altitude_ahl" units="mm">Altitude above home level (positive for up). Zero for Ground Level</field>
+
+      <field type="uint8_t"     name="anno_type" enum="ANNOTATION_TYPE">Annotation Type</field>
+	  <field type="uint8_t[16]" name="name">A displayable name for this Event.</field>
+      <field type="uint8_t[16]" name="guid">Unique GUID to tie other Data/Media to this Event. Zero for no additional data</field>
+      <field type="uint32_t"    name="color">Color as RGBA. Sidebar bubble color if ANNOTATION_TYPE is NONE.</field>
+      <field type="uint8_t"     name="radius" units="dm">Radius in decimeters, zero for point</field>
+      
+      <field type="uint8_t[64]" name="payload">Event Payload, custom decode by SensorType</field>     
+    </message>
+    
+    <message id="43082" name="ISSMS_SENSOR_PAYLOAD">
+      <description>Describes a ISSMS Payload of a MAVNET_SENSOR_EVENT message</description>
+      <field type="uint8_t" name="version"> </field>
+      <field type="int16_t" name="rq_peak_vert"  units="gE3">Ride Quality - Peak Vertical Acceleration (G's, E3)</field>
+      <field type="int16_t" name="rq_peak_long"  units="gE3">Ride Quality - Peak Longitudinal Acceleration (G's, E3)</field>
+      <field type="int16_t" name="rq_peak_lat"   units="gE3">Ride Quality - Peak Lateral Acceleration (G's, E3)</field>
+      <field type="int16_t" name="peak_roll_avg" units="degE3">Average Roll (Degrees, E3)</field>
+      <field type="int16_t" name="peak_roll"     units="degE3">Peak Roll (Degres, E3)</field>
+      <field type="int16_t" name="amb_temp"      units="CE2">Ambient Temperature (Celsius, E2)</field>
+      <field type="uint8_t" name="alert_type" enum="ISSMS_ALERTS">ISSMS Alert Type: Roll, Pitch, Battery, etc. </field>
+      <field type="uint8_t" name="alert_subtype">Alert sub-type, depends on alert_type.</field>
+      <field type="int32_t" name="alert_value">Interpretation depends on alert_type. Signed Value (1E2)</field>
+      <field type="int32_t" name="alert_threshold">Threshold for value. Signed Value (1E2)</field>	  
+    </message>
+    
+    <message id="43083" name="CESER_SENSOR_PAYLOAD">
+      <description>Describes a CESER Sensor Infrastructure Payload of a MAVNET_SENSOR_EVENT message (8 bytes)</description>
+      <field type="uint8_t"  name="state"  enum="BOOLEAN_ENUM">Processing images (0. Disabled(Default), 1. Enabled)</field>
+	  <field type="uint16_t" name="num_images_processed">The number of images the CESER sensor has processed since the flight started</field>
+      <field type="uint16_t" name="num_items_detected">The number of items the CESER sensor has detected since the flight started</field>
+      <field type="uint8_t" name="auto_upload"  enum="BOOLEAN_ENUM">Automatically upload to Mavnet. (0. No(Default), 1. Yes)</field>
+      <field type="uint8_t" name="image_dist" units="m">Distance between images. Default: 25 meters</field>
+      
+	  <field type="uint8_t" name="damage" units="%">Percentage</field>
+      <field type="uint8_t" name="confidence" units="%">ML Confidence</field>
+    </message>
+
+    <message id="43084" name="ISSMS_BRAKEPRESSURE_SENSOR_PAYLOAD">
+      <description>Describes a ISSMS Brake Pressure Sensor Payload of a MAVNET_SENSOR_EVENT message (5 bytes)</description>
+      <field type="uint16_t[4]" name="brake_pressure" units="PSIE2">Brake Pressure (PSI * e2) (Line, Aux, Cyl, Emerg)</field>
+	  <field type="char[12]"    name="brake_state">State of the brake system ex. Charging, Set, etc.</field>
+	  <field type="char[12]"    name="car_id">Car Id</field>
+    </message>
+    
+    <message id="43085" name="SONICTWO_SENSOR_PAYLOAD">
+      <description>Describes a Sonic TWO Sensor Payload of a MAVNET_SENSOR_EVENT message</description>
+      <field type="uint16_t" name="wind_speed">Wind Speed</field>   
+      <field type="uint16_t" name="wind_direction">Wind direction</field>
+      <field type="int16_t" name="ambient_temp">multiplied by 10</field>
+      <field type="uint16_t" name="relative_humidity">Outside relative humidity</field>
+      <field type="uint16_t" name="barometric_pressure">multiplied by 10</field>
+      <field type="uint32_t" name="rain">multiplied by 100, rain fall</field>
+      <field type="uint16_t" name="solar_rad">Solar radiation</field>
+      <field type="uint8_t" name="battery_volt">multiplied by 10</field>
+      <field type="char[2]" name="weather_status">CONFIG status</field>
+    </message>
+  
+    <message id="43087" name="ISSMS_JUNCTION_BOX_SENSOR_PAYLOAD">
+      <description>Describes an ISSMS_JUNCTION_BOX Payload of a MAVNET_SENSOR_EVENT message (36 bytes)</description>
+      <field type="char[1]"    name="location">Junction Box Location</field>
+	  <field type="uint8_t"    enum="BOOLEAN_ENUM" name="status">status, on=1, off=0</field>   
+      <field type="uint16_t"   name="mode">Mode</field>
+      <field type="int16_t[4]" name="axle_bearing_temp" units="degE2">Axle Bearing Temperature(Celsius * e2)</field>
+      <field type="int16_t[4]" name="analog_temp" units="degE2">Analog Temperature(Celsius * e2) (Brake Temp)</field>
+      <field type="int16_t[4]" name="axle_bearing_vib" units="gE2">Axle Bearing Vibration</field>
+      <field type="int16_t[4]" name="sensor_bias" units="mV">Sensor Bias (Volts)</field>
+	  <!--
+      <field type="uint8_t[4]" name="wheel_flat_health">Wheel Health</field>
+      <field type="uint8_t[4]" name="bearing_health">Bearing Health</field>  
+	  -->
+    </message>
+
+    <message id="43088" name="RADEYE_SENSOR_PAYLOAD">
+      <description>Describes a RADEYE Payload of a MAVNET_SENSOR_EVENT message (?? bytes)</description>
+      <field type="uint32_t" name="dose_rate_q1" units="uSv/hour E2">1st Quartile Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_rate_q2" units="uSv/hour E2">2nd Quartile Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_rate_q3" units="uSv/hour E2">3rd Quartile Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_rate_min" units="uSv/hour E2">Min. Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_rate_max" units="uSv/hour E2">Max. Dose Rate(hundredths usv/hour E2)</field>
+      <field type="uint32_t" name="dose_max_time" units="sec">Max Timestamp (since UNIX epoch)</field>
+      <field type="uint16_t" name="count_rate_avg" units="cps">Avg Count Rate(cps)</field>
+      <field type="uint8_t"  name="voltage_battery_avg" units="Volts*10">Avg Battery Voltage</field>
+      <field type="int16_t"  name="temperature_avg" units="deg*10">Avg Probe temperature (Celsius)</field>
+    </message>
+	
+    <message id="43089" name="WAES_SENSOR_PAYLOAD">
+      <description>Describes a WAES Payload of a MAVNET_SENSOR_EVENT message (46 bytes)</description>
+      <field type="uint8_t"  enum="BOOLEAN_ENUM" name="status">status, on=1, off=0</field>   
+      <field type="int32_t"  units="mA"           name="current_one">Current in mA</field>
+      <field type="uint32_t" units="mV"           name="voltage_one">Voltage in mV</field>
+      <field type="int32_t"  units="mA"           name="current_two">Current in mA</field>
+      <field type="uint32_t" units="mV"           name="voltage_two">Voltage in mV</field>
+      <field type="uint32_t" name="fan">Voltage for fan tach</field>
+      <field type="uint32_t" name="flow">Voltage for flow sensor</field>
+      <field type="uint32_t" name="ambient_temp">Ambient temperature weather station</field>
+      <field type="uint32_t" name="barometric_pressure"> Weather station barometric pressure</field>
+      <field type="uint32_t" name="relative_humidity">Weather station relative humidity</field>
+      <field type="uint32_t" name="wind_speed">Speed in m/s</field>
+      <field type="uint32_t" name="wind_direction">Degrees</field>
+      <field type="uint8_t"  name="wind_status">Wind sensor error field</field>
+    </message>
+    
+    <message id="43090" name="SUPERVOLO_SENSOR_PAYLOAD">
+      <description>Describes a SuperVolo  Payload of a MAVNET_SENSOR_EVENT message (9 bytes)</description>
+      <field type="uint8_t" name="fuel_level" units="%">Remaining liquid fuel: (0%: 0, 100%: 100)</field>
+      <field type="uint16_t" name="motor_rpm" units="rpm">Current revolutions per minute of the motor</field>
+      <field type="int16_t" name="charge_rate" units="cA">Battery Charge Rate. 1e-2 Amps</field>
+      <field type="int16_t" name="throttle_pos" units="%">Throttle Position (0%: 0, 100%: 100)</field>
+      <field type="int16_t" name="current_consumed" units="mAh">Used battery capacity in mAh</field>
+    </message>
+
+    <message id="43091" name="CAMERAGIMBAL_SENSOR_PAYLOAD">
+      <description>Describes a CameraGimbal  Payload of a MAVNET_SENSOR_EVENT message (18 bytes)</description>
+      <field type="uint8_t" name="camera_id">The index of the camera, if multiple are available. Zero is first camera (default)</field>   
+      <field type="uint8_t" name="camera_flags" enum="SENSOR_CAMERA_FLAG" display="bitmask">Camera behavior bitmap.</field>
+      <field type="uint8_t" name="pointing_mode" enum="SENSOR_CAMERAGIMBAL_MODE_FLAG" display="bitmask">How the gimbal is pointing the camera.</field>
+      <field type="uint8_t" name="video_mode" enum="SENSOR_CAMERAGIMBAL_VIDEO_FLAG" display="bitmask">Which video mode the camera is in.</field>
+      <field type="uint8_t" name="is_recording">Status of local recording (0 not recording, 1 recording)</field>
+      <field type="int32_t" name="ground_cross_latitude" units="degE7">Latitude (WGS84) of the gimbal LOS ground crossing</field>
+      <field type="int32_t" name="ground_cross_longitude" units="degE7">Longitude (WGS84) of the gimbal LOS ground crossing</field>
+      <field type="int32_t" name="ground_cross_altitude_msl" units="mm">Altitude MSL of the gimbal LOS ground crossing</field>
+      <field type="uint8_t" name="streaming">Streaming Video (0:Off, 1: On)</field>
+    </message>
+
+    <message id="43092" name="TEMPERATURE_SENSOR_PAYLOAD">
+      <description>Describes a Temperature Sensor Payload of a MAVNET_SENSOR_EVENT message (10+25 bytes)</description>
+      <field type="int16_t[5]" name="temp_array" units="degE2">Temperature Array(Celsius)</field>
+      <field type="char[5]" name="temp_name_0">Temp name</field>
+      <field type="char[5]" name="temp_name_1">Temp name</field>
+      <field type="char[5]" name="temp_name_2">Temp name</field>
+      <field type="char[5]" name="temp_name_3">Temp name</field>
+      <field type="char[5]" name="temp_name_4">Temp name</field>
+    </message>
+
+    <message id="43093" name="BATTERY_SENSOR_PAYLOAD">
+      <description>Describes a Battery sensor Payload of a MAVNET_SENSOR_EVENT message (18 bytes)</description>
+      <field type="int16_t"  name="temp">Temperature in C</field>
+      <field type="uint16_t" name="voltage" units="mV">Voltage in mV 1e4</field>
+      <field type="int16_t"  name="current" units="mA">Current in mA 1e3</field>
+      <field type="int32_t"  name="current_consumed" units="mAH">current consumed in mAH</field>
+      <field type="uint8_t"  name="soc" units="%">Battery remaining percentage 0-100%</field>
+      <field type="int32_t"  name="ttg" units="min">time remaining in minutes</field>
+      <field type="int8_t"   name="error">MPPT Error message</field>
+      <field type="uint8_t"  name="alarm">BVM Alarm message</field>
+      <field type="uint8_t"  name="alarm_reason">BVM Alarm reason</field>
+    </message>
+
+    <message id="43094" name="SWITCH_SENSOR_PAYLOAD">
+      <description>Describes a Switch sensor Payload of a MAVNET_SENSOR_EVENT message (1 bytes)</description>
+      <field type="uint8_t" name="status" enum="BOOLEAN_ENUM">status, on=1, off=0</field>   
+    </message>
+
+    <message id="43095" name="CSTAR_SENSOR_PAYLOAD">
+      <description>Describes a C-Star sensor Payload of a MAVNET_SENSOR_EVENT message (10 bytes)</description>
+      <field type="uint8_t" name="alert_status" enum="SENSOR_CSTAR_STATUS">Alert Status</field>
+	  <field type="uint8_t" name="alert_type" enum="CSTAR_ALERTS">C-Star Alert Type: Roll, Pitch, Battery, etc. </field>
+      <field type="int32_t" name="value">Signed Value (1E2)</field>
+      <field type="int32_t" name="threshold">Signed Threshold for value (1E2)</field>
+      <field type="uint16_t" name="speed" units="dm/s">Vehicle Speed</field>
+    </message>
+
+    <message id="43096" name="GRIPPER_SENSOR_PAYLOAD">
+      <description>Describes a Gripper sensor Payload of a MAVNET_SENSOR_EVENT message (1 bytes)</description>
+      <field type="uint8_t"  name="state" enum="BOOLEAN_ENUM">Gripper state (0=Release(Default), 1=Hold)</field>
+    </message>
+
+    <message id="43097" name="CAMERA_SENSOR_PAYLOAD">
+      <description>Describes a Camera sensor Payload of a MAVNET_SENSOR_EVENT message (4 bytes)</description>
+      <field type="uint8_t" name="camera_id">The index of the camera, if multiple are available. Zero is first camera (default)</field>   
+      <field type="uint8_t" name="camera_flags" enum="SENSOR_CAMERA_FLAG" display="bitmask">Camera behavior bitmap.</field>
+      <field type="uint16_t" name="images_taken">Number of Images taken.</field>
+	  <!-- Camera Events carry no additional information -->
+    </message>
+
+    <message id="43098" name="N2NMONITOR_SENSOR_PAYLOAD">
+      <description>Describes a N2NMonitor sensor Payload of a MAVNET_SENSOR_EVENT message (36 bytes)</description>
+      <field type="uint8_t"  name="chnl0_status" enum="SENSOR_N2NMONITOR_STATUS">Chnl 0 Status</field>
+      <field type="uint8_t"  name="chnl0_mode"   enum="SENSOR_N2NMONITOR_MODE">Chnl 0 Mode</field>
+      <field type="char[16]" name="chnl0_target">Chnl 0 IP Address of Target</field>
+      <field type="uint8_t"  name="chnl1_status" enum="SENSOR_N2NMONITOR_STATUS">Chnl 1 Status</field>
+      <field type="uint8_t"  name="chnl1_mode"   enum="SENSOR_N2NMONITOR_MODE">Chnl 1 Mode</field>
+      <field type="char[16]" name="chnl1_target">Chnl 1 IP Address of Target</field>
+    </message>
+
+    <message id="43099" name="G2205_SENSOR_PAYLOAD">
+      <description>Describes a G2205 (Picarro device) sensor Payload of a MAVNET_SENSOR_EVENT message (14 bytes)</description>
+      <field type="uint16_t" name="status">status</field>   
+      <field type="uint32_t" name="gas_avg">multiplied by 1000</field>
+      <field type="uint32_t" name="gas_high">multiplied by 1000</field>
+      <field type="uint32_t" name="gas_low">multiplied by 1000</field>
+    </message>
+
+    <message id="43100" name="SHIELD_TIMING_SENSOR_PAYLOAD">
+      <description>Describes a SHIELD timing sensor Payload of a MAVNET_SENSOR_EVENT message (18 bytes)</description>
+      <field type="uint8_t" name="alert_status" enum="SENSOR_CSTAR_STATUS">Alert Status</field>
+	  <field type="uint8_t" name="status" enum="BOOLEAN_ENUM">status, on=1, off=0</field>   
+      <field type="uint32_t" name="arbitration_id">Arbitration ID of the CAN message</field>
+      <field type="uint32_t" name="min_allowed">The minimum number of messages allowed</field>
+      <field type="uint32_t" name="max_allowed">The maximum number of messages allowed</field>
+      <field type="uint32_t" name="found_count">The number of messages found</field>
+    </message>
+
+    <message id="43101" name="SHIELD_SIGNATURE_SENSOR_PAYLOAD">
+      <description>Describes a SHIELD signature sensor Payload of a MAVNET_SENSOR_EVENT message (48 bytes)</description>
+      <field type="uint8_t" name="alert_status" enum="SENSOR_CSTAR_STATUS">Alert Status</field>
+      <field type="uint8_t" name="status" enum="BOOLEAN_ENUM">status, on=1, off=0</field>   
+      <field type="uint32_t" name="arbitration_id">Arbitration ID of the CAN message</field>
+      <field type="uint32_t" name="diagnostic_id">Diagnostic ID</field>
+      <field type="char[20]" name="msg_type">Signature message type</field>
+      <field type="char[10]" name="msg_direction">Signature message direction</field>
+      <field type="uint32_t" name="source">Signature message source</field>
+      <field type="uint32_t" name="destination">Signature message destination</field>
+    </message>
+    
+	<message id="43102" name="SILVUSRADIO_SENSOR_PAYLOAD">
+      <description>Describes a SILVUS Radio sensor Payload of a MAVNET_SENSOR_EVENT message (17 bytes)</description>
+      <field type="uint16_t" name="voltage_battery" units="mV">Battery voltage (0: no information)</field>
+      <field type="int16_t"  name="system_temperature" units="degE2">Temperature (Celsius)</field>
+      <field type="int8_t"   name="los_rssi">LOS availability and signal strength. (-2: Faulted, -1: Disabled, 0-100: signal strength)</field>
+      <field type="int32_t" name="latitude" units="degE7">Latitude (WGS84)</field>
+      <field type="int32_t" name="longitude" units="degE7">Longitude (WGS84)</field>
+      <field type="int32_t" name="altitude_amsl" units="mm">Altitude above mean sea level (positive for up)</field>
+    </message>
+	
+	<message id="43103" name="FLOW_SENSOR_PAYLOAD">
+      <description>Describes a Flow sensor Payload of a MAVNET_SENSOR_EVENT message (4 bytes)</description>	
+      <field type="int32_t" name="actual">flow rate in SCCM (cm^3/min at 0C, 1bar)</field>
+    </message>
+	
+	<message id="43104" name="KROMEK_SENSOR_PAYLOAD">
+      <description>Describes a KROMEK Radio sensor Payload of a MAVNET_SENSOR_EVENT message (?? bytes)</description>
+	  <field type="uint8_t" name="battery_level" units="%">Battery Level</field>
+	  <field type="int16_t" name="unit_temperature" units="deg*10">Unit Temperature(Celsius)</field>
+	  <field type="uint32_t" name="dose_rate" units="uSv/hour E2">Avg Dose (uSv/hour E3)</field>
+	  <field type="uint32_t" name="dose_rate_peak" units="uSv/hour E2">Peak Dose (uSv/hour E3)</field>
+	  <field type="uint16_t" name="count_rate" units="cps">Avg. Count Rate(cps)</field>
+	  <field type="uint16_t" name="count_rate_peak" units="cps">Peak Count Rate(cps)</field>
+    </message>
+	
+    <message id="43105" name="SPACES_SENSOR_LIGHT_PAYLOAD">
+      <description>Describes a SPACES Light sensor Payload of a MAVNET_SENSOR_EVENT message (5 bytes)</description>
+      <field type="uint8_t" name="alert_status" enum="SENSOR_CSTAR_STATUS">Alert Status</field>
+      <field type="uint16_t" name="value">Signed Value(1E2)</field>
+      <field type="uint16_t" name="threshold">Signed Threshold for value (1E2)</field>
+	</message>
+
+    <message id="43106" name="REMOTEID_SENSOR_PAYLOAD">
+      <description>Describes a RemoteID sensor Payload of a MAVNET_SENSOR_EVENT message (49 bytes)</description>
+	  <!-- Sensor UI Data -->
+      <field type="uint8_t" name="num_targets">Number of Active Items</field>
+      <field type="char[14]" name="sensor_id">DroneScoutId</field>
+	  <!-- Sensor Event Data -->
+	  <field type="char[20]" name="uas_id">Unique UAS identifier</field>
+	  <field type="uint8_t"  name="id_type" enum="REMOTEID_TRANSMISSION_MODES">How the UAS was identified</field>
+	  <field type="uint8_t"  name="channel">Wi-Fi Channel, Zero for BLE</field>
+	  <field type="uint8_t"  name="status" enum="REMOTEID_STATUS"></field>
+	  <field type="uint8_t"  name="uatype" enum="REMOTEID_UATYPES"></field>
+	  <!--
+	  <field type="int32_t"  name="op_latitude" units="degE7">Operator Latitude (WGS84)</field>
+	  <field type="int32_t"  name="op_longitude" units="degE7">Operator Longitude (WGS84)</field>
+      <field type="uint32_t" name="color">Target and Operator Color as RGBA</field>
+	  -->
+      <field type="uint16_t" name="heading" units="deg">Target heading, in compass units (0..360, 0=north, 361 is invalid)</field>
+      <field type="float"    name="airspeed" units="m/s">Current airspeed</field>
+
+
+	</message>
+	
+    </messages>
+</mavlink>
